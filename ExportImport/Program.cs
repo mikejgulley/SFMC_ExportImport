@@ -15,6 +15,7 @@ namespace ExportImport
             APIObject[] dataExtFields = {};
             APIObject[] dataFolders = {};
             APIObject[] dataFoldersByDE = {};
+            APIObject[] queries = {};
 
             using (SoapClient soapProd = ExactTargetServices.ExactTargetBinding(ConfigSettings.ETUsername, ConfigSettings.ETPassword))
             {
@@ -23,21 +24,28 @@ namespace ExportImport
 
                 //DataExtensionUtil.DescribeDataExtensions(soapProd);
                 //DataFolderUtil.DescribeDataFolders(soapProd);
+                //QueryUtil.DescribeQuery(soapProd);
 
                 //dataFolders = DataFolderUtil.GetAllDataFolders(soapProd);
                 //dataFolders = DataFolderUtil.GetAllDataFoldersByType(soapProd, "email");
 
-                //dataExts = DataExtensionUtil.GetAllDataExtensions(soapProd);
+                dataExts = DataExtensionUtil.GetAllDataExtensions(soapProd);
 
-                //foreach (DataExtension de in dataExts)
-                //{
-                //    dataExtFields = DataExtensionUtil.GetDataExtensionFieldsByDECustomerKey(soapProd, de);
-                //}
+                foreach (DataExtension de in dataExts)
+                {
+                    //dataExtFields = DataExtensionUtil.GetDataExtensionFieldsByDECustomerKey(soapProd, de);
+                    JSONUtil.saveDEToJSON(de);
+                }
 
                 Console.WriteLine("...");
                 Console.ReadLine();
 
-                //dataFolders = DataFolderUtil.GetAllDataFolders(soapProd);
+                dataFolders = DataFolderUtil.GetAllDataFolders(soapProd);
+
+                foreach (DataFolder df in dataFolders)
+                {
+                    JSONUtil.saveDataFolderToJSON(df);
+                }
 
                 //foreach (DataExtension de in dataExts)
                 //{
@@ -52,7 +60,17 @@ namespace ExportImport
             {
                 Console.WriteLine("Env: Sbx\n");
                 //DataExtensionUtil.CreateDataExtensions(soapSbx, dataExts, dataExtFields);
-                DataFolderUtil.CreateDataFolder(soapSbx);
+                APIObject[] dfArray = DataFolderUtil.GetAllDataFoldersByType(soapSbx, "dataextension");
+
+                foreach (DataFolder df in dfArray)
+                {
+                    Console.WriteLine("Data Folder Name: " + df.Name);
+                    Console.WriteLine("Data Folder ID: " + df.ID);
+                }
+
+                //Console.ReadLine();
+
+                //DataFolderUtil.CreateDataFolder(soapSbx);
             }
             
         }

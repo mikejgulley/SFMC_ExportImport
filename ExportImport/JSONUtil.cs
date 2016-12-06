@@ -25,5 +25,27 @@ namespace ExportImport
             }
         }
 
+       public static void saveDataFolderToJSON(DataFolder dfIn)
+       {
+           string directory = "C:\\Desktop\\SylvanJSON\\DataFolders";
+           Directory.CreateDirectory(directory);
+
+           string newName = dfIn.Name;
+           string filepath = String.Empty;
+
+           if (newName.Contains(@"\") || newName.Contains(@"/"))
+           {
+               newName = newName.Replace(@"\", "");
+               newName = newName.Replace(@"/", "");
+           }
+
+           filepath = Path.Combine(directory, newName);
+
+           using (StreamWriter file = File.CreateText(filepath + ".json"))
+           {
+               JsonSerializer serializer = new JsonSerializer();
+               serializer.Serialize(file, dfIn);
+           }
+       }
     }
 }

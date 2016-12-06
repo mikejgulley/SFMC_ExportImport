@@ -14,7 +14,8 @@ namespace ExportImport
             string requestID;
 
             ObjectDefinitionRequest objDefs = new ObjectDefinitionRequest();
-            objDefs.ObjectType = "DataExtensionField";
+            //objDefs.ObjectType = "DataExtensionField";
+            objDefs.ObjectType = "DataExtension";
 
             ObjectDefinition[] definitions = soapClientIn.Describe(new ObjectDefinitionRequest[] { objDefs }, out requestID);
 
@@ -33,7 +34,6 @@ namespace ExportImport
 
         public static APIObject[] GetAllDataExtensions(SoapClient soapClientIn) 
         {
-            // DE's
             String requestID;
             String status;
             APIObject[] results;
@@ -53,36 +53,6 @@ namespace ExportImport
             return results;
         }
 
-        public static APIObject[] GetDataExtensionFieldsByDECustomerKey(SoapClient soapClientIn, DataExtension deIn)
-        {
-            //Console.WriteLine("Entering GetDataExtensionFieldsByDECustomerKey()");
-
-            deIn.CategoryIDSpecified = true;
-
-            Console.WriteLine("Current DE Name: " + deIn.Name);
-            Console.WriteLine("Current DE CategoryID: " + deIn.CategoryID);
-
-            String requestID;
-            String status;
-            APIObject[] results;
-
-            SimpleFilterPart sfp = new SimpleFilterPart();
-            sfp.Property = "DataExtension.CustomerKey";
-            sfp.SimpleOperator = SimpleOperators.equals;
-            sfp.Value = new String[] { deIn.CustomerKey };
-
-            RetrieveRequest rr = new RetrieveRequest();
-
-            rr.ObjectType = "DataExtensionField";
-            rr.Properties = new String[] { "Name", "ObjectID", "CustomerKey" };
-            rr.Filter = sfp;
-
-            status = soapClientIn.Retrieve(rr, out requestID, out results);
-            Console.WriteLine(status);
-            Console.WriteLine("Num DE fields: " + results.Length + "\n");
-
-            return results;
-        }
 
         //public static APIObject[] GetDataExtensionFolderByParentFolderCustomerKey
         //    (SoapClient soapClientIn, DataExtension deIn)

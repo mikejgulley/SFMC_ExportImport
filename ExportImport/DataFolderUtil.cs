@@ -43,7 +43,9 @@ namespace ExportImport
             RetrieveRequest rr = new RetrieveRequest();
 
             rr.ObjectType = "DataFolder";
-            rr.Properties = new String[] { "Name", "ObjectID", "CustomerKey" };
+            rr.Properties = new String[] { "Name", "Description", "ContentType", "ID", "ObjectID", "CustomerKey", 
+                "ParentFolder.Name", "ParentFolder.Description", "ParentFolder.ContentType", "ParentFolder.ID", 
+                "ParentFolder.ObjectID", "ParentFolder.CustomerKey"};
 
             status = soapClientIn.Retrieve(rr, out requestID, out results);
 
@@ -69,7 +71,7 @@ namespace ExportImport
             RetrieveRequest rr = new RetrieveRequest();
 
             rr.ObjectType = "DataFolder";
-            rr.Properties = new String[] { "Name", "ObjectID", "ContentType" };
+            rr.Properties = new String[] { "Name", "ObjectID", "ContentType", "ID" };
 
             status = soapClientIn.Retrieve(rr, out requestID, out results);
 
@@ -148,8 +150,8 @@ namespace ExportImport
             datafolder.Name = "API Created Folder";
             datafolder.Description = "API Created Folder";
             datafolder.ParentFolder = new DataFolder();
-            datafolder.ParentFolder.Name = "Data Extensions"; // This is the ID of the 'my emails' folder that you can get from doing a retrieve 
-            //datafolder.ParentFolder.IDSpecified = true;
+            datafolder.ParentFolder.ID = 99425; // This is the ID of the 'Data Extensions' folder that you can get from doing a retrieve 
+            datafolder.ParentFolder.IDSpecified = true;
             datafolder.ContentType = "dataextension";
 
             CreateResult[] cresults = soapClientIn.Create(new CreateOptions(), new APIObject[] { datafolder }, out requestID, out status);
