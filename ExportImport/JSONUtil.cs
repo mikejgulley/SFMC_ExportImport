@@ -11,17 +11,7 @@ namespace ExportImport
 {
     class JSONUtil
     {
-        //public static string saveAPIObjectToJSON(APIObject[] apiObjectIn) 
-        //{
-        //    string jsonFile = JsonConvert.SerializeObject(apiObjectIn, Formatting.Indented);
-
-        //    using (StreamWriter file = File.CreateText(@"C:\Desktop\SylvanJSON" + "\\" + apiObjectIn.GetType().ToString() + "\\" + deIn.Name))
-
-
-        //    return jsonFile;
-        //}
-
-        public static void saveDEToJSON(DataExtension deIn)
+       public static void saveDEToJSON(DataExtension deIn)
         {
             string directory = "C:\\Desktop\\SylvanJSON\\DataExtensions";
             Directory.CreateDirectory(directory);
@@ -34,5 +24,6 @@ namespace ExportImport
                 serializer.Serialize(file, deIn);
             }
         }
+
     }
 }
