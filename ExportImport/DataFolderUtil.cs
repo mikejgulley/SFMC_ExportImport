@@ -86,8 +86,6 @@ namespace ExportImport
         {
             Console.WriteLine("Current DE Name: " + deIn.Name);
 
-            //deIn.CategoryIDSpecified = true;
-
             String requestID;
             String status;
             APIObject[] results;
@@ -140,5 +138,28 @@ namespace ExportImport
 
         //    return results;
         //}
+
+        public static void CreateDataFolder(SoapClient soapClientIn)
+        {
+            String requestID;
+            String status;
+
+            DataFolder datafolder = new DataFolder();
+            datafolder.Name = "API Created Folder";
+            datafolder.Description = "API Created Folder";
+            datafolder.ParentFolder = new DataFolder();
+            datafolder.ParentFolder.Name = "Data Extensions"; // This is the ID of the 'my emails' folder that you can get from doing a retrieve 
+            //datafolder.ParentFolder.IDSpecified = true;
+            datafolder.ContentType = "dataextension";
+
+            CreateResult[] cresults = soapClientIn.Create(new CreateOptions(), new APIObject[] { datafolder }, out requestID, out status);
+
+            foreach (CreateResult result in cresults)
+            {
+                Console.WriteLine(result.StatusMessage);
+            }
+
+            Console.WriteLine(requestID + ": " + status);
+        }
     }
 }

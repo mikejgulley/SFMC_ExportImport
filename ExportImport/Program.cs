@@ -27,7 +27,7 @@ namespace ExportImport
                 //dataFolders = DataFolderUtil.GetAllDataFolders(soapProd);
                 //dataFolders = DataFolderUtil.GetAllDataFoldersByType(soapProd, "email");
 
-                dataExts = DataExtensionUtil.GetAllDataExtensions(soapProd);
+                //dataExts = DataExtensionUtil.GetAllDataExtensions(soapProd);
 
                 //foreach (DataExtension de in dataExts)
                 //{
@@ -39,12 +39,12 @@ namespace ExportImport
 
                 //dataFolders = DataFolderUtil.GetAllDataFolders(soapProd);
 
-                foreach (DataExtension de in dataExts)
-                {
-                    //dataFoldersByDE = DataFolderUtil.GetDataFoldersByDECustomerKey(soapProd, de);
-                    dataFoldersByDE = DataFolderUtil.GetDataFolderByDECategoryID(soapProd, de);
-                    JSONUtil.saveDEToJSON(de);
-                }
+                //foreach (DataExtension de in dataExts)
+                //{
+                //    //dataFoldersByDE = DataFolderUtil.GetDataFoldersByDECustomerKey(soapProd, de);
+                //    dataFoldersByDE = DataFolderUtil.GetDataFolderByDECategoryID(soapProd, de);
+                //    JSONUtil.saveDEToJSON(de);
+                //}
                 
             }
 
@@ -52,6 +52,7 @@ namespace ExportImport
             {
                 Console.WriteLine("Env: Sbx\n");
                 //DataExtensionUtil.CreateDataExtensions(soapSbx, dataExts, dataExtFields);
+                DataFolderUtil.CreateDataFolder(soapSbx);
             }
             
         }
