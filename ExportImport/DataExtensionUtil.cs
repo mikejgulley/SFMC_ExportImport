@@ -129,14 +129,14 @@ namespace ExportImport
                     {
                         Console.WriteLine(defArraySrc[j]);
                         defArrayDest[j] = defArraySrc[j];
-                        //defArray[j].DataType = defSrc.DataType;
+                        defArrayDest[j].DataType = defSrc.DataType;
                         j++;
                     }
 
                     // put columns into dest DE
-                    //dataExtDest.Fields = defArray;
+                    dataExtDest.Fields = defArraySrc;
 
-                    //CreateResult[] aoResults = soapClientIn.Create(new CreateOptions(), new APIObject[] { dataExtDest }, out requestID, out status);
+                    CreateResult[] aoResults = soapClientIn.Create(new CreateOptions(), new APIObject[] { dataExtDest }, out requestID, out status);
                     Console.WriteLine("Status: " + status);
                     Console.WriteLine("Request ID: " + requestID);
                 }

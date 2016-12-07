@@ -48,17 +48,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountUtil.cs" />
+    <Compile Include="BusinessUnitUtil.cs" />
     <Compile Include="ConfigSettings.cs" />
     <Compile Include="DataExtensionFieldsUtil.cs" />
     <Compile Include="DataExtensionUtil.cs" />
     <Compile Include="DataFolderUtil.cs" />
     <Compile Include="ExactTargetServices.cs" />
     <Compile Include="ExportFromProd.cs" />
+    <Compile Include="ImportDefinitionUtil.cs" />
     <Compile Include="ImportToSbx.cs" />
     <Compile Include="JSONUtil.cs" />
+    <Compile Include="PortfolioUtil.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QueryUtil.cs" />
+    <Compile Include="QueryDefinitionUtil.cs" />
+    <Compile Include="RoleUtil.cs" />
     <Compile Include="Service References\PartnerAPI\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

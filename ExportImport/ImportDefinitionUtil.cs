@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace ExportImport
 {
-    class QueryUtil
+    class ImportDefinitionUtil
     {
-        public static void DescribeQuery(SoapClient soapClientIn)
+        public static void DescribeImport(SoapClient soapClientIn)
         {
             string requestID;
 
             ObjectDefinitionRequest objDefs = new ObjectDefinitionRequest();
-            objDefs.ObjectType = "QueryDefinition";
+            objDefs.ObjectType = "ImportDefinition";
 
             ObjectDefinition[] definitions = soapClientIn.Describe(new ObjectDefinitionRequest[] { objDefs }, out requestID);
 
@@ -31,7 +31,7 @@ namespace ExportImport
             }
         }
 
-        public static APIObject[] GetAllQueries(SoapClient soapClientIn)
+        public static APIObject[] GetAllImportDefinitions(SoapClient soapClientIn)
         {
             String requestID;
             String status;
@@ -39,16 +39,18 @@ namespace ExportImport
 
             RetrieveRequest rr = new RetrieveRequest();
 
-            rr.ObjectType = "QueryDefinition";
-            rr.Properties = new String[] { "Name", "Description", "ObjectID", "CustomerKey", 
-                "QueryText", "TargetType", "DataExtensionTarget.Name", "DataExtensionTarget.CustomerKey", 
-                "DataExtensionTarget.Description", "TargetUpdateType", "FileType", "FileSpec", "Status",
-                "CategoryID"};
+            rr.ObjectType = "ImportDefinition";
+            rr.Properties = new String[] { "Name", "ObjectID", "CustomerKey", "Description", "Client.ClientID1", 
+                "FileSpec", "AllowErrors", "FieldMappingType", "FileType", "UpdateType", "MaxFileAge", 
+                "MaxFileAgeScheduleOffset", "MaxImportFrequency", "DestinationObject.ID", "DestinationObject.ObjectID",
+                "Notification.ResponseType", "Notification.ResponseAddress", "RetrieveFileTransferLocation.ObjectID", 
+                "Delimiter", "HeaderLines", "EndOfLineRepresentation", "NullRepresentation", "StandardQuotedStrings",
+                "DateFormattingLocale.LocaleCode"}; // Client.ClientID1 lets associate with BU
 
             status = soapClientIn.Retrieve(rr, out requestID, out results);
 
             Console.WriteLine(status);
-            Console.WriteLine("Num Queries: " + results.Length);
+            Console.WriteLine("Num Import Definitions: " + results.Length);
 
             Console.ReadLine();
 

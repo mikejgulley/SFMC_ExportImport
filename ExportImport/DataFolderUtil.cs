@@ -39,6 +39,7 @@ namespace ExportImport
             String requestID;
             String status;
             APIObject[] results;
+            int totalCount = 0;
 
             RetrieveRequest rr = new RetrieveRequest();
 
@@ -47,10 +48,18 @@ namespace ExportImport
                 "ParentFolder.Name", "ParentFolder.Description", "ParentFolder.ContentType", "ParentFolder.ID", 
                 "ParentFolder.ObjectID", "ParentFolder.CustomerKey"};
 
-            status = soapClientIn.Retrieve(rr, out requestID, out results);
+            do
+            {
+                status = soapClientIn.Retrieve(rr, out requestID, out results);
 
-            Console.WriteLine(status);
-            Console.WriteLine("Num Data Folders: " + results.Length);
+                totalCount += results.Length;
+
+                Console.WriteLine(status);
+                Console.WriteLine("Num Data Folders: " + totalCount);
+
+                rr = new RetrieveRequest();
+                rr.ContinueRequest = requestID;
+            } while (status.Equals("MoreDataAvailable"));
 
             Console.ReadLine();
 
@@ -114,32 +123,6 @@ namespace ExportImport
 
             return results;
         }
-
-        //public static APIObject[] GetDataFoldersByDECustomerKey(SoapClient soapClientIn, DataExtension deIn)
-        //{
-        //    String requestID;
-        //    String status;
-        //    APIObject[] results;
-
-        //    SimpleFilterPart sfp = new SimpleFilterPart();
-        //    sfp.Property = "ParentFolder.CustomerKey";
-        //    sfp.SimpleOperator = SimpleOperators.equals;
-        //    sfp.Value = new String[] { deIn.CustomerKey };
-
-        //    RetrieveRequest rr = new RetrieveRequest();
-
-        //    rr.ObjectType = "DataFolder";
-        //    rr.Properties = new String[] { "Name", "ObjectID", "ContentType" };
-
-        //    status = soapClientIn.Retrieve(rr, out requestID, out results);
-
-        //    Console.WriteLine(status);
-        //    Console.WriteLine("Num Data Folders for Parent Folder Customer Key: " + deIn.Name + " = " + results.Length);
-
-        //    Console.ReadLine();
-
-        //    return results;
-        //}
 
         public static void CreateDataFolder(SoapClient soapClientIn)
         {
