@@ -67,5 +67,37 @@ namespace ExportImport
 
             return results;
         }
+
+        private void CreateAccount(SoapClient soapClientIn, Account accountIn)
+        {
+            String requestID;
+            String status;
+            Account acct = new Account();
+            acct.CustomerKey = accountIn.CustomerKey;
+            acct.AccountType = accountIn.AccountType;
+            acct.Name = accountIn.Name;
+            acct.Email = accountIn.Email;
+            acct.FromName = accountIn.FromName;
+            acct.BusinessName = accountIn.BusinessName;
+            acct.Address = accountIn.Address;
+            acct.City = accountIn.City;
+            acct.State = accountIn.State;
+            acct.Zip = accountIn.Zip;
+            acct.IsTestAccount = accountIn.IsTestAccount;
+            acct.IsTestAccountSpecified = accountIn.IsTestAccountSpecified;
+            acct.EditionID = accountIn.EditionID;
+            acct.EditionIDSpecified = accountIn.EditionIDSpecified;
+            acct.IsActive = accountIn.IsActive;
+            acct.IsActiveSpecified = accountIn.IsActiveSpecified;
+            CreateOptions co = new CreateOptions();
+            CreateResult[] cresults = soapClientIn.Create(co, new APIObject[] { acct }, out requestID, out status);
+            foreach (CreateResult result in cresults)
+            {
+                Console.WriteLine(result.StatusMessage);
+            }
+            Console.WriteLine(requestID + ": " + status);
+            //Readline will pause the output so you can see the results
+            Console.ReadLine();
+        }
     }
 }
