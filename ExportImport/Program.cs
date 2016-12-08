@@ -20,6 +20,8 @@ namespace ExportImport
             APIObject[] roles = {};
             APIObject[] bUnits = {};
             APIObject[] accounts = {};
+            APIObject[] accountUsers = {};
+            APIObject[] emails = {};
 
             using (SoapClient soapProd = ExactTargetServices.ExactTargetBinding(ConfigSettings.ETUsername, ConfigSettings.ETPassword))
             {
@@ -34,6 +36,9 @@ namespace ExportImport
                 //RoleUtil.DescribeRole(soapProd);
                 //BusinessUnitUtil.DescribeBusinessUnit(soapProd);
                 //AccountUtil.DescribeAccount(soapProd);
+                //AccountUserUtil.DescribeAccountUser(soapProd);
+                //RoleUtil.DescribePermission(soapProd);
+                //EmailUtil.DescribeEmail(soapProd);
 
                 //Data Folders
                 //dataFolders = DataFolderUtil.GetAllDataFolders(soapProd);
@@ -70,12 +75,12 @@ namespace ExportImport
                 //Console.ReadLine();
 
                 // Queries
-                //queries = QueryDefinitionUtil.GetAllQueries(soapProd);
+                queries = QueryDefinitionUtil.GetAllQueries(soapProd);
 
-                //foreach (QueryDefinition qd in queries)
-                //{
-                //    JSONUtil.saveQueryToJSON(qd);
-                //}
+                foreach (QueryDefinition qd in queries)
+                {
+                    JSONUtil.saveQueryToJSON(qd);
+                }
 
                 // Import Definitions
                 //importDefs = ImportDefinitionUtil.GetAllImportDefinitions(soapProd);
@@ -109,7 +114,23 @@ namespace ExportImport
                 //    JSONUtil.saveAccountToJSON(account);
 
                 //}
-                
+
+                // Account Users
+                //accountUsers = AccountUserUtil.GetAllAccountUsers(soapProd);
+
+                //foreach (AccountUser accountUser in accountUsers)
+                //{
+                //    JSONUtil.saveAccountUserToJSON(accountUser);
+                //    //RoleUtil.GetUserRoleByCustomerKey(soapProd, accountUser);
+                //}
+
+                // Emails
+                //emails = EmailUtil.GetAllEmails(soapProd);
+
+                //foreach (Email email in emails)
+                //{
+                //    JSONUtil.saveEmailToJSON(email);
+                //}
             }
 
             using (SoapClient soapSbx = ExactTargetServices.ExactTargetBinding(ConfigSettings.ETUsernameSbx, ConfigSettings.ETPasswordSbx))
@@ -127,6 +148,20 @@ namespace ExportImport
                 //Console.ReadLine();
 
                 //DataFolderUtil.CreateDataFolder(soapSbx);
+
+                //int counter = 0;
+
+                //foreach (DataFolder df in dataFolders)
+                //{
+                //    while (counter < 10)
+                //    {
+                //        Console.WriteLine("Creating Data Folder: " + df.Name);
+                //        DataFolderUtil.CreateDataFolderFromExistingInProd(soapSbx, df);
+                //        counter++;
+                //    }
+                //}
+
+                
             }
             
         }

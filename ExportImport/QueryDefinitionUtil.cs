@@ -39,11 +39,19 @@ namespace ExportImport
 
             RetrieveRequest rr = new RetrieveRequest();
 
+            ClientID clientID = new ClientID();
+            clientID.ID = 7237980;
+            clientID.IDSpecified = true;
+            ClientID[] targetClientIDs = { clientID };
+            rr.ClientIDs = targetClientIDs;
+            rr.QueryAllAccounts = true;
+            rr.QueryAllAccountsSpecified = true;
+
             rr.ObjectType = "QueryDefinition";
-            rr.Properties = new String[] { "Name", "Description", "ObjectID", "CustomerKey", 
-                "QueryText", "TargetType", "DataExtensionTarget.Name", "DataExtensionTarget.CustomerKey", 
+            rr.Properties = new String[] { "ObjectID", "Client.ID", "Name", "CustomerKey", 
+                "Description", "QueryText", "TargetType", "DataExtensionTarget.Name", "DataExtensionTarget.CustomerKey", 
                 "DataExtensionTarget.Description", "TargetUpdateType", "FileType", "FileSpec", "Status",
-                "CategoryID"};
+                "CreatedDate", "ModifiedDate", "CategoryID"};
 
             status = soapClientIn.Retrieve(rr, out requestID, out results);
 

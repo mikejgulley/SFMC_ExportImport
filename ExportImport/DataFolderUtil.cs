@@ -46,7 +46,7 @@ namespace ExportImport
             rr.ObjectType = "DataFolder";
             rr.Properties = new String[] { "Name", "Description", "ContentType", "ID", "ObjectID", "CustomerKey", 
                 "ParentFolder.Name", "ParentFolder.Description", "ParentFolder.ContentType", "ParentFolder.ID", 
-                "ParentFolder.ObjectID", "ParentFolder.CustomerKey"};
+                "ParentFolder.ObjectID", "ParentFolder.CustomerKey" };
 
             do
             {
@@ -60,6 +60,38 @@ namespace ExportImport
                 rr = new RetrieveRequest();
                 rr.ContinueRequest = requestID;
             } while (status.Equals("MoreDataAvailable"));
+
+            Console.ReadLine();
+
+            return results;
+        }
+
+        public static APIObject[] GetDataFolderByName(SoapClient soapClientIn, string dataFolderNameIn)
+        {
+            String requestID;
+            String status;
+            APIObject[] results;
+
+            SimpleFilterPart sfp = new SimpleFilterPart();
+            sfp.Property = "Name";
+            sfp.SimpleOperator = SimpleOperators.equals;
+            sfp.Value = new String[] { dataFolderNameIn };
+
+            RetrieveRequest rr = new RetrieveRequest();
+
+            rr.ObjectType = "DataFolder";
+            rr.Properties = new String[] { "Name", "Description", "ContentType", "ID", "ObjectID", "CustomerKey", 
+                "ParentFolder.Name", "ParentFolder.Description", "ParentFolder.ContentType", "ParentFolder.ID", 
+                "ParentFolder.ObjectID", "ParentFolder.CustomerKey" };
+            rr.Filter = sfp;
+
+            status = soapClientIn.Retrieve(rr, out requestID, out results);
+
+            Console.WriteLine(status);
+            Console.WriteLine("Num Data Folders: " + results.Length);
+
+            rr = new RetrieveRequest();
+            rr.ContinueRequest = requestID;
 
             Console.ReadLine();
 
@@ -80,7 +112,9 @@ namespace ExportImport
             RetrieveRequest rr = new RetrieveRequest();
 
             rr.ObjectType = "DataFolder";
-            rr.Properties = new String[] { "Name", "ObjectID", "ContentType", "ID" };
+            rr.Properties = new String[] { "Name", "Description", "ContentType", "ID", "ObjectID", "CustomerKey", 
+                "ParentFolder.Name", "ParentFolder.Description", "ParentFolder.ContentType", "ParentFolder.ID", 
+                "ParentFolder.ObjectID", "ParentFolder.CustomerKey" };
 
             status = soapClientIn.Retrieve(rr, out requestID, out results);
 
@@ -109,7 +143,9 @@ namespace ExportImport
             RetrieveRequest rr = new RetrieveRequest();
 
             rr.ObjectType = "DataFolder";
-            rr.Properties = new String[] { "Name", "ObjectID", "CustomerKey", "ID" };
+            rr.Properties = new String[] { "Name", "Description", "ContentType", "ID", "ObjectID", "CustomerKey", 
+                "ParentFolder.Name", "ParentFolder.Description", "ParentFolder.ContentType", "ParentFolder.ID", 
+                "ParentFolder.ObjectID", "ParentFolder.CustomerKey" };
             rr.Filter = sfp;
 
             status = soapClientIn.Retrieve(rr, out requestID, out results);
@@ -146,5 +182,71 @@ namespace ExportImport
 
             Console.WriteLine(requestID + ": " + status);
         }
+
+        public static void CreateDataFolderFromExistingInProd(SoapClient soapClientIn, DataFolder dataFolderIn)
+        {
+            String requestID;
+            String status;
+
+            DataFolder datafolder = new DataFolder();
+            datafolder.Name = dataFolderIn.Name;
+            datafolder.Description = dataFolderIn.Description;
+            datafolder.ParentFolder = dataFolderIn.ParentFolder;
+            datafolder.ParentFolder.ID = dataFolderIn.ParentFolder.ID; // This is the ID of the 'Data Extensions' folder that you can get from doing a retrieve 
+            datafolder.ParentFolder.IDSpecified = dataFolderIn.ParentFolder.IDSpecified;
+            datafolder.ContentType = dataFolderIn.ContentType;
+
+            CreateResult[] cresults = soapClientIn.Create(new CreateOptions(), new APIObject[] { datafolder }, out requestID, out status);
+
+            foreach (CreateResult result in cresults)
+            {
+                Console.WriteLine(result.StatusMessage);
+            }
+
+            Console.WriteLine(requestID + ": " + status);
+        }
+
+        // CANNOT create or delete Data Folders via API
+        //public static void DeleteDataFolder(SoapClient soapClientIn, string dataFolderNameIn)
+        //{
+        //    String requestID;
+        //    String retrieveStatus;
+        //    String deleteStatus;
+        //    APIObject[] results;
+
+        //    SimpleFilterPart sfp = new SimpleFilterPart();
+        //    sfp.Property = "Name";
+        //    sfp.SimpleOperator = SimpleOperators.equals;
+        //    sfp.Value = new string[] { dataFolderNameIn };
+
+        //    RetrieveRequest rr = new RetrieveRequest();
+
+        //    rr.ObjectType = "DataFolder";
+        //    rr.Properties = new String[] { "Name", "Description", "ContentType", "ID", "ObjectID", "CustomerKey", 
+        //        "ParentFolder.Name", "ParentFolder.Description", "ParentFolder.ContentType", "ParentFolder.ID", 
+        //        "ParentFolder.ObjectID", "ParentFolder.CustomerKey" };
+        //    rr.Filter = sfp;
+
+        //    retrieveStatus = soapClientIn.Retrieve(rr, out requestID, out results);
+
+        //    foreach (DataFolder df in results)
+        //    {
+        //        if (df.Name.Equals(dataFolderNameIn))
+        //        {
+        //            DataFolder datafolder = new DataFolder();
+        //            datafolder.Name = dataFolderNameIn;
+        //            datafolder.ID = df.ID;
+
+        //            DeleteResult[] dresults = soapClientIn.Delete(new DeleteOptions(), new APIObject[] { datafolder }, out requestID, out deleteStatus);
+
+        //            foreach (DeleteResult result in dresults)
+        //            {
+        //                Console.WriteLine(result.StatusMessage);
+        //            }
+
+        //            Console.WriteLine(requestID + ": " + deleteStatus);
+        //        }
+        //    }
+        //}
     }
 }

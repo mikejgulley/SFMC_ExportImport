@@ -39,6 +39,14 @@ namespace ExportImport
 
             RetrieveRequest rr = new RetrieveRequest();
 
+            ClientID clientID = new ClientID();
+            clientID.ID = 7237980;
+            clientID.IDSpecified = true;
+            ClientID[] targetClientIDs = { clientID };
+            rr.ClientIDs = targetClientIDs;
+            rr.QueryAllAccounts = true;
+            rr.QueryAllAccountsSpecified = true;
+
             rr.ObjectType = "ImportDefinition";
             rr.Properties = new String[] { "Name", "ObjectID", "CustomerKey", "Description", "Client.ClientID1", 
                 "FileSpec", "AllowErrors", "FieldMappingType", "FileType", "UpdateType", "MaxFileAge", 

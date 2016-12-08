@@ -13,11 +13,18 @@ namespace ExportImport
     {
         public static void saveAccountToJSON(Account accountIn)
         {
-            string directory = "C:\\Desktop\\SylvanJSON\\Accounts";
+            string directory = "C:\\SylvanJSON\\Accounts";
             Directory.CreateDirectory(directory);
 
             string newName = accountIn.Name;
             string filepath = String.Empty;
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("_");
+            sb.Append(accountIn.CustomerKey);
+            sb.Append("_");
+            sb.Append(accountIn.ParentID);
+            sb.Append(".json");
 
             if (newName.Contains(@"\") || newName.Contains(@"/"))
             {
@@ -27,20 +34,46 @@ namespace ExportImport
 
             filepath = Path.Combine(directory, newName);
 
-            using (StreamWriter file = File.CreateText(filepath + ".json"))
+            using (StreamWriter file = File.CreateText(filepath + sb))
             {
                 JsonSerializer serializer = new JsonSerializer();
                 serializer.Serialize(file, accountIn);
             }
         }
 
+        public static void saveAccountUserToJSON(AccountUser accountUserIn)
+        {
+            string directory = "C:\\SylvanJSON\\AccountUsers";
+            Directory.CreateDirectory(directory);
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("_");
+            sb.Append(accountUserIn.CustomerKey);
+            sb.Append("_");
+            sb.Append(accountUserIn.Client.ID);
+            sb.Append(".json");
+
+            using (StreamWriter file = File.CreateText(Path.Combine(directory, accountUserIn.Name) + sb))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                serializer.Serialize(file, accountUserIn);
+            }
+        }
+
         public static void saveBusinessUnitToJSON(BusinessUnit buIn)
         {
-            string directory = "C:\\Desktop\\SylvanJSON\\BusinessUnits";
+            string directory = "C:\\SylvanJSON\\BusinessUnits";
             Directory.CreateDirectory(directory);
 
             string newName = buIn.Name;
             string filepath = String.Empty;
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("_");
+            sb.Append(buIn.CustomerKey);
+            sb.Append("_");
+            sb.Append(buIn.ParentID);
+            sb.Append(".json");
 
             if (newName.Contains(@"\") || newName.Contains(@"/"))
             {
@@ -50,7 +83,7 @@ namespace ExportImport
 
             filepath = Path.Combine(directory, newName);
 
-            using (StreamWriter file = File.CreateText(filepath + ".json"))
+            using (StreamWriter file = File.CreateText(filepath + sb))
             {
                 JsonSerializer serializer = new JsonSerializer();
                 serializer.Serialize(file, buIn);
@@ -59,7 +92,7 @@ namespace ExportImport
 
         public static void saveDEToJSON(DataExtension deIn)
         {
-            string directory = "C:\\Desktop\\SylvanJSON\\DataExtensions";
+            string directory = "C:\\SylvanJSON\\DataExtensions";
             Directory.CreateDirectory(directory);
             
             //string jsonFile = JsonConvert.SerializeObject(deIn, Formatting.Indented);
@@ -73,7 +106,7 @@ namespace ExportImport
 
        public static void saveDataFolderToJSON(DataFolder dfIn)
        {
-           string directory = "C:\\Desktop\\SylvanJSON\\DataFolders";
+           string directory = "C:\\SylvanJSON\\DataFolders";
            Directory.CreateDirectory(directory);
 
            string newName = dfIn.Name;
@@ -94,12 +127,38 @@ namespace ExportImport
            }
        }
 
-       public static void saveImportDefToJSON(ImportDefinition idIn)
+       public static void saveEmailToJSON(Email emailIn)
        {
-           string directory = "C:\\Desktop\\SylvanJSON\\ImportDefinitions";
+           string directory = "C:\\SylvanJSON\\Emails";
            Directory.CreateDirectory(directory);
 
-           using (StreamWriter file = File.CreateText(Path.Combine(directory, idIn.Name) + ".json"))
+           StringBuilder sb = new StringBuilder();
+           sb.Append("_");
+           sb.Append(emailIn.CustomerKey);
+           sb.Append("_");
+           sb.Append(emailIn.Client.ID);
+           sb.Append(".json");
+
+           using (StreamWriter file = File.CreateText(Path.Combine(directory, emailIn.Name) + sb))
+           {
+               JsonSerializer serializer = new JsonSerializer();
+               serializer.Serialize(file, emailIn);
+           }
+       }
+
+       public static void saveImportDefToJSON(ImportDefinition idIn)
+       {
+           string directory = "C:\\SylvanJSON\\ImportDefinitions";
+           Directory.CreateDirectory(directory);
+
+           StringBuilder sb = new StringBuilder();
+           sb.Append("_");
+           sb.Append(idIn.CustomerKey);
+           sb.Append("_");
+           sb.Append(idIn.Client.ClientID1);
+           sb.Append(".json");
+
+           using (StreamWriter file = File.CreateText(Path.Combine(directory, idIn.Name) + sb))
            {
                JsonSerializer serializer = new JsonSerializer();
                serializer.Serialize(file, idIn);
@@ -108,10 +167,12 @@ namespace ExportImport
 
        public static void saveQueryToJSON(QueryDefinition qdIn)
        {
-           string directory = "C:\\Desktop\\SylvanJSON\\Queries";
+           string directory = "C:\\SylvanJSON\\Queries";
            Directory.CreateDirectory(directory);
 
-           using (StreamWriter file = File.CreateText(Path.Combine(directory, qdIn.Name) + ".json"))
+           String filename = String.Format("{0}{1}{2}{1}{3}{4}", qdIn.Name, "_", qdIn.CustomerKey, qdIn.Client.ID, ".json");
+
+           using (StreamWriter file = File.CreateText(Path.Combine(directory, filename)))
            {
                JsonSerializer serializer = new JsonSerializer();
                serializer.Serialize(file, qdIn);
@@ -120,10 +181,20 @@ namespace ExportImport
 
        public static void saveRoleToJSON(Role roleIn)
        {
-           string directory = "C:\\Desktop\\SylvanJSON\\Roles";
+           string directory = "C:\\SylvanJSON\\Roles";
            Directory.CreateDirectory(directory);
 
-           using (StreamWriter file = File.CreateText(Path.Combine(directory, roleIn.Name) + ".json"))
+           StringBuilder sb = new StringBuilder();
+           if (!roleIn.Name.Equals(roleIn.CustomerKey))
+           {
+               sb.Append("_");
+               sb.Append(roleIn.CustomerKey);               
+           }
+           sb.Append("_");
+           sb.Append(roleIn.Client.ID);
+           sb.Append(".json");
+
+           using (StreamWriter file = File.CreateText(Path.Combine(directory, roleIn.Name) + sb))
            {
                JsonSerializer serializer = new JsonSerializer();
                serializer.Serialize(file, roleIn);
