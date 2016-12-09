@@ -30,6 +30,8 @@ namespace ExportImport
                 }
                 Console.WriteLine("");
             }
+
+            Console.ReadLine();
         }
 
         public static APIObject[] GetAllDataExtensions(SoapClient soapClientIn) 

@@ -55,6 +55,7 @@
     <Compile Include="DataExtensionFieldsUtil.cs" />
     <Compile Include="DataExtensionUtil.cs" />
     <Compile Include="DataFolderUtil.cs" />
+    <Compile Include="Describer.cs" />
     <Compile Include="EmailUtil.cs" />
     <Compile Include="ExactTargetServices.cs" />
     <Compile Include="ExportFromProd.cs" />

@@ -188,6 +188,20 @@ namespace ExportImport
            }
        }
 
+       public static void savePortfolioItemToJSON(Portfolio portIn)
+       {
+           string directory = "C:\\SylvanJSON\\Portfolio";
+           Directory.CreateDirectory(directory);
+
+           String filename = String.Format("{0}{1}{2}{1}{3}{4}", portIn.DisplayName, "_", portIn.CustomerKey, portIn.Client.ID, ".json");
+
+           using (StreamWriter file = File.CreateText(Path.Combine(directory, filename)))
+           {
+               JsonSerializer serializer = new JsonSerializer();
+               serializer.Serialize(file, portIn);
+           }
+       }
+
        public static void saveQueryToJSON(QueryDefinition qdIn)
        {
            string directory = "C:\\SylvanJSON\\Queries";

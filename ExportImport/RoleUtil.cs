@@ -29,6 +29,8 @@ namespace ExportImport
                 }
                 Console.WriteLine("");
             }
+
+            Console.ReadLine();
         }
 
         // returns nothing for Permission and PermissionSet

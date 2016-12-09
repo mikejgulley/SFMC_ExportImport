@@ -29,6 +29,8 @@ namespace ExportImport
                 }
                 Console.WriteLine("");
             }
+
+            Console.ReadLine();
         }
 
         public static APIObject[] GetAllAccounts(SoapClient soapClientIn)

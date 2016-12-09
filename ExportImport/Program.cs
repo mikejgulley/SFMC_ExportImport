@@ -22,6 +22,7 @@ namespace ExportImport
             APIObject[] accounts = {};
             APIObject[] accountUsers = {};
             APIObject[] emails = {};
+            APIObject[] portfolioObjects = {};
 
             using (SoapClient soapProd = ExactTargetServices.ExactTargetBinding(ConfigSettings.ETUsername, ConfigSettings.ETPassword))
             {
@@ -29,25 +30,16 @@ namespace ExportImport
                 Console.WriteLine("Env: Prod\n");
 
                 //Describe APIObjects
-                //DataExtensionUtil.DescribeDataExtensions(soapProd);
-                //DataFolderUtil.DescribeDataFolders(soapProd);
-                //QueryUtil.DescribeQuery(soapProd);
-                //ImportDefinitionUtil.DescribeImport(soapProd);
-                //RoleUtil.DescribeRole(soapProd);
-                //BusinessUnitUtil.DescribeBusinessUnit(soapProd);
-                //AccountUtil.DescribeAccount(soapProd);
-                //AccountUserUtil.DescribeAccountUser(soapProd);
-                //RoleUtil.DescribePermission(soapProd);
-                //EmailUtil.DescribeEmail(soapProd);
+                //Describer.DescribeAPIObjects(soapProd);
 
                 //Data Extensions
-                dataExts = DataExtensionUtil.GetAllDataExtensions(soapProd);
+                //dataExts = DataExtensionUtil.GetAllDataExtensions(soapProd);
 
-                foreach (DataExtension de in dataExts)
-                {
-                    de.Fields = (DataExtensionField[]) DataExtensionFieldsUtil.GetDataExtensionFieldsByDECustomerKey(soapProd, de);
-                    JSONUtil.saveDEToJSON(de);
-                }
+                //foreach (DataExtension de in dataExts)
+                //{
+                //    de.Fields = (DataExtensionField[]) DataExtensionFieldsUtil.GetDataExtensionFieldsByDECustomerKey(soapProd, de);
+                //    JSONUtil.saveDEToJSON(de);
+                //}
 
                 //foreach (DataExtension de in dataExts)
                 //{
@@ -127,6 +119,15 @@ namespace ExportImport
                 //{
                 //    JSONUtil.saveEmailToJSON(email);
                 //}
+
+                // Portfolio
+                portfolioObjects = PortfolioUtil.GetAllPortfolioItems(soapProd);
+
+                foreach (Portfolio port in portfolioObjects)
+                {
+                    //Console.WriteLine(port.FileName);
+                    JSONUtil.savePortfolioItemToJSON(port);
+                }
             }
 
             using (SoapClient soapSbx = ExactTargetServices.ExactTargetBinding(ConfigSettings.ETUsernameSbx, ConfigSettings.ETPasswordSbx))
