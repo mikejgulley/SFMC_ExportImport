@@ -39,14 +39,25 @@ namespace ExportImport
             String requestID;
             String status;
             APIObject[] results;
+            APIObject[] totalResults = { new APIObject() };
+            List<APIObject> totalResultsList = new List<APIObject>();
             int totalCount = 0;
 
             RetrieveRequest rr = new RetrieveRequest();
 
+            ClientID clientID = new ClientID();
+            clientID.ID = 7237980;
+            clientID.IDSpecified = true;
+            ClientID[] targetClientIDs = { clientID };
+            rr.ClientIDs = targetClientIDs;
+            rr.QueryAllAccounts = true;
+            rr.QueryAllAccountsSpecified = true;
+
             rr.ObjectType = "DataFolder";
-            rr.Properties = new String[] { "Name", "Description", "ContentType", "ID", "ObjectID", "CustomerKey", 
-                "ParentFolder.Name", "ParentFolder.Description", "ParentFolder.ContentType", "ParentFolder.ID", 
-                "ParentFolder.ObjectID", "ParentFolder.CustomerKey" };
+            rr.Properties = new String[] { "ID", "Client.ID", "ParentFolder.ID", "ParentFolder.CustomerKey", "ParentFolder.ObjectID", "ParentFolder.Name", 
+                "ParentFolder.Description", "ParentFolder.ContentType", "ParentFolder.IsActive", "ParentFolder.IsEditable", "ParentFolder.AllowChildren", "Name",
+                "Description", "ContentType", "IsActive", "IsEditable", "AllowChildren", "CreatedDate", "ModifiedDate", "Client.ModifiedBy", "ObjectID", "CustomerKey",
+                "Client.EnterpriseID", "Client.CreatedBy" };
 
             do
             {
@@ -54,16 +65,24 @@ namespace ExportImport
 
                 totalCount += results.Length;
 
+                foreach (APIObject apiObject in results)
+                {
+                    totalResultsList.Add(apiObject);
+                }
+
                 Console.WriteLine(status);
-                Console.WriteLine("Num Data Folders: " + totalCount);
+                Console.WriteLine("Data Folders: " + totalCount);
 
                 rr = new RetrieveRequest();
                 rr.ContinueRequest = requestID;
             } while (status.Equals("MoreDataAvailable"));
 
+            totalResults = totalResultsList.ToArray<APIObject>();
+            Console.WriteLine("Total Data Folders: " + totalResults.Length);
+
             Console.ReadLine();
 
-            return results;
+            return totalResults;
         }
 
         public static APIObject[] GetDataFolderByName(SoapClient soapClientIn, string dataFolderNameIn)

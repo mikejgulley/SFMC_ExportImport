@@ -37,20 +37,52 @@ namespace ExportImport
             String requestID;
             String status;
             APIObject[] results;
+            APIObject[] totalResults = { new APIObject() };
+            List<APIObject> totalResultsList = new List<APIObject>();
+            int totalCount = 0;
 
             RetrieveRequest rr = new RetrieveRequest();
 
+            ClientID clientID = new ClientID();
+            clientID.ID = 7237980;
+            clientID.IDSpecified = true;
+            ClientID[] targetClientIDs = { clientID };
+            rr.ClientIDs = targetClientIDs;
+            rr.QueryAllAccounts = true;
+            rr.QueryAllAccountsSpecified = true;
+
             rr.ObjectType = "DataExtension"; // the DataExtensionObject is the actual record in the DE
-            rr.Properties = new String[] { "Name", "ObjectID", "CustomerKey", "CategoryID" };
+            rr.Properties = new String[] { "ObjectID", "PartnerKey", "CustomerKey", "Name", "CreatedDate", "ModifiedDate", "Client.ID",
+                "Description", "IsSendable", "IsTestable", "SendableDataExtensionField.Name", "SendableSubscriberField.Name", "Template.CustomerKey",
+                "CategoryID", "Status", "DataRetentionPeriodLength", "DataRetentionPeriodUnitOfMeasure", "RowBasedRetention",
+                "ResetRetentionPeriodOnImport", "DeleteAtEndOfRetentionPeriod", "RetainUntil" };
+                // including "DataRetentionPeriod" in props causes error. ("Must specify valid information for parsing in the string")
+                // including "IsPlatformObject", makes Name come back Null
 
-            status = soapClientIn.Retrieve(rr, out requestID, out results);
+            do
+            {
+                status = soapClientIn.Retrieve(rr, out requestID, out results);
 
-            Console.WriteLine(status);
-            Console.WriteLine("Num DE's: " + results.Length);
+                totalCount += results.Length;
+
+                foreach (APIObject apiObject in results)
+                {
+                    totalResultsList.Add(apiObject);
+                }
+
+                Console.WriteLine(status);
+                Console.WriteLine("Num Data Extensiones: " + totalCount);
+
+                rr = new RetrieveRequest();
+                rr.ContinueRequest = requestID;
+            } while (status.Equals("MoreDataAvailable"));
+
+            totalResults = totalResultsList.ToArray<APIObject>();
+            Console.WriteLine("Total Data Extensions: " + totalResults.Length);
 
             Console.ReadLine();
 
-            return results;
+            return totalResults;
         }
 
 

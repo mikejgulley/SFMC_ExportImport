@@ -40,18 +40,14 @@ namespace ExportImport
                 //RoleUtil.DescribePermission(soapProd);
                 //EmailUtil.DescribeEmail(soapProd);
 
-                //Data Folders
-                //dataFolders = DataFolderUtil.GetAllDataFolders(soapProd);
-                //dataFolders = DataFolderUtil.GetAllDataFoldersByType(soapProd, "email");
-
                 //Data Extensions
-                //dataExts = DataExtensionUtil.GetAllDataExtensions(soapProd);
+                dataExts = DataExtensionUtil.GetAllDataExtensions(soapProd);
 
-                //foreach (DataExtension de in dataExts)
-                //{
-                //    //dataExtFields = DataExtensionUtil.GetDataExtensionFieldsByDECustomerKey(soapProd, de);
-                //    JSONUtil.saveDEToJSON(de);
-                //}
+                foreach (DataExtension de in dataExts)
+                {
+                    de.Fields = (DataExtensionField[]) DataExtensionFieldsUtil.GetDataExtensionFieldsByDECustomerKey(soapProd, de);
+                    JSONUtil.saveDEToJSON(de);
+                }
 
                 //foreach (DataExtension de in dataExts)
                 //{
@@ -75,12 +71,12 @@ namespace ExportImport
                 //Console.ReadLine();
 
                 // Queries
-                queries = QueryDefinitionUtil.GetAllQueries(soapProd);
+                //queries = QueryDefinitionUtil.GetAllQueries(soapProd);
 
-                foreach (QueryDefinition qd in queries)
-                {
-                    JSONUtil.saveQueryToJSON(qd);
-                }
+                //foreach (QueryDefinition qd in queries)
+                //{
+                //    JSONUtil.saveQueryToJSON(qd);
+                //}
 
                 // Import Definitions
                 //importDefs = ImportDefinitionUtil.GetAllImportDefinitions(soapProd);

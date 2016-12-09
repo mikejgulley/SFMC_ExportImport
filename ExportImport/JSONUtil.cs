@@ -94,10 +94,10 @@ namespace ExportImport
         {
             string directory = "C:\\SylvanJSON\\DataExtensions";
             Directory.CreateDirectory(directory);
-            
-            //string jsonFile = JsonConvert.SerializeObject(deIn, Formatting.Indented);
 
-            using (StreamWriter file = File.CreateText(Path.Combine(directory, deIn.Name) + ".json"))
+            String filename = String.Format("{0}{1}{2}{1}{3}{4}", deIn.Name, "_", deIn.CustomerKey, deIn.Client.ID, ".json");
+            
+            using (StreamWriter file = File.CreateText(Path.Combine(directory, filename)))
             {
                 JsonSerializer serializer = new JsonSerializer();
                 serializer.Serialize(file, deIn);
@@ -110,6 +110,7 @@ namespace ExportImport
            Directory.CreateDirectory(directory);
 
            string newName = dfIn.Name;
+           string newCustomerKey = dfIn.CustomerKey;
            string filepath = String.Empty;
 
            if (newName.Contains(@"\") || newName.Contains(@"/"))
@@ -118,9 +119,31 @@ namespace ExportImport
                newName = newName.Replace(@"/", "");
            }
 
-           filepath = Path.Combine(directory, newName);
+           if (dfIn.CustomerKey.Contains(@"\") || dfIn.CustomerKey.Contains(@"/"))
+           {
+               newCustomerKey = newCustomerKey.Replace(@"\", "");
+               newCustomerKey = newCustomerKey.Replace(@"/", "");
+           }
 
-           using (StreamWriter file = File.CreateText(filepath + ".json"))
+           StringBuilder sb = new StringBuilder();
+           sb.Append(newName);
+           if (!newName.Equals(newCustomerKey) && !newCustomerKey.Equals(String.Empty))
+           {
+               sb.Append("_");
+               sb.Append(newCustomerKey);
+           }
+           sb.Append("_");
+           sb.Append(dfIn.ID);
+           sb.Append("_");
+           sb.Append(dfIn.Client.ID);
+           sb.Append(".json");
+
+           //String filename = String.Format("{0}{1}{2}{1}{3}{4}", newName, "_", newCustomerKey, dfIn.Client.ID, ".json");
+           String filename = sb.ToString();
+
+           filepath = Path.Combine(directory, filename);
+           
+           using (StreamWriter file = File.CreateText(filepath))
            {
                JsonSerializer serializer = new JsonSerializer();
                serializer.Serialize(file, dfIn);
