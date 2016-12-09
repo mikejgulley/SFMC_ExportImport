@@ -48,12 +48,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountUserUtil.cs" />
     <Compile Include="AccountUtil.cs" />
     <Compile Include="BusinessUnitUtil.cs" />
     <Compile Include="ConfigSettings.cs" />
     <Compile Include="DataExtensionFieldsUtil.cs" />
     <Compile Include="DataExtensionUtil.cs" />
     <Compile Include="DataFolderUtil.cs" />
+    <Compile Include="EmailUtil.cs" />
     <Compile Include="ExactTargetServices.cs" />
     <Compile Include="ExportFromProd.cs" />
     <Compile Include="ImportDefinitionUtil.cs" />
