@@ -52,6 +52,7 @@
     <Compile Include="AccountUtil.cs" />
     <Compile Include="BusinessUnitUtil.cs" />
     <Compile Include="ConfigSettings.cs" />
+    <Compile Include="ContentAreaUtil.cs" />
     <Compile Include="DataExtensionFieldsUtil.cs" />
     <Compile Include="DataExtensionUtil.cs" />
     <Compile Include="DataFolderUtil.cs" />
@@ -62,9 +63,11 @@
     <Compile Include="ImportDefinitionUtil.cs" />
     <Compile Include="ImportToSbx.cs" />
     <Compile Include="JSONUtil.cs" />
+    <Compile Include="ListsUtil.cs" />
     <Compile Include="PortfolioUtil.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PublicationListUtil.cs" />
     <Compile Include="QueryDefinitionUtil.cs" />
     <Compile Include="RoleUtil.cs" />
     <Compile Include="Service References\PartnerAPI\Reference.cs">
@@ -72,6 +75,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="SuppressionListUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

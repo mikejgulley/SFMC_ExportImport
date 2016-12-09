@@ -12,17 +12,21 @@ namespace ExportImport
         public static void DescribeAPIObjects(SoapClient soapClientIn)
         {
             //Describe APIObjects
-            DataExtensionUtil.DescribeDataExtensions(soapClientIn);
-            DataFolderUtil.DescribeDataFolders(soapClientIn);
-            QueryDefinitionUtil.DescribeQuery(soapClientIn);
-            ImportDefinitionUtil.DescribeImport(soapClientIn);
-            RoleUtil.DescribeRole(soapClientIn);
-            BusinessUnitUtil.DescribeBusinessUnit(soapClientIn);
-            AccountUtil.DescribeAccount(soapClientIn);
-            AccountUserUtil.DescribeAccountUser(soapClientIn);
-            RoleUtil.DescribeRole(soapClientIn);
-            EmailUtil.DescribeEmail(soapClientIn);
-            PortfolioUtil.DescribePortfolioItem(soapClientIn);
+            //DataExtensionUtil.DescribeDataExtensions(soapClientIn);
+            //DataFolderUtil.DescribeDataFolders(soapClientIn);
+            //QueryDefinitionUtil.DescribeQuery(soapClientIn);
+            //ImportDefinitionUtil.DescribeImport(soapClientIn);
+            //RoleUtil.DescribeRole(soapClientIn);
+            //BusinessUnitUtil.DescribeBusinessUnit(soapClientIn);
+            //AccountUtil.DescribeAccount(soapClientIn);
+            //AccountUserUtil.DescribeAccountUser(soapClientIn);
+            //RoleUtil.DescribeRole(soapClientIn);
+            //EmailUtil.DescribeEmail(soapClientIn);
+            //PortfolioUtil.DescribePortfolioItem(soapClientIn);
+            //ContentAreaUtil.DescribeContentArea(soapClientIn);
+            //ListsUtil.DescribeLists(soapClientIn);
+            //SuppressionListUtil.DescribeSuppressionLists(soapClientIn);
+            PublicationListUtil.DescribePublicationLists(soapClientIn);
         }
     }
 }

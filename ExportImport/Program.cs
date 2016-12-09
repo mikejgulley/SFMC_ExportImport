@@ -23,6 +23,7 @@ namespace ExportImport
             APIObject[] accountUsers = {};
             APIObject[] emails = {};
             APIObject[] portfolioObjects = {};
+            APIObject[] contentAreas = {};
 
             using (SoapClient soapProd = ExactTargetServices.ExactTargetBinding(ConfigSettings.ETUsername, ConfigSettings.ETPassword))
             {
@@ -30,7 +31,7 @@ namespace ExportImport
                 Console.WriteLine("Env: Prod\n");
 
                 //Describe APIObjects
-                //Describer.DescribeAPIObjects(soapProd);
+                Describer.DescribeAPIObjects(soapProd);
 
                 //Data Extensions
                 //dataExts = DataExtensionUtil.GetAllDataExtensions(soapProd);
@@ -121,13 +122,22 @@ namespace ExportImport
                 //}
 
                 // Portfolio
-                portfolioObjects = PortfolioUtil.GetAllPortfolioItems(soapProd);
+                //portfolioObjects = PortfolioUtil.GetAllPortfolioItems(soapProd);
 
-                foreach (Portfolio port in portfolioObjects)
-                {
-                    //Console.WriteLine(port.FileName);
-                    JSONUtil.savePortfolioItemToJSON(port);
-                }
+                //foreach (Portfolio port in portfolioObjects)
+                //{
+                //    //Console.WriteLine(port.FileName);
+                //    JSONUtil.savePortfolioItemToJSON(port);
+                //}
+
+                // Content Area
+                //contentAreas = ContentAreaUtil.GetAllContentAreas(soapProd);
+
+                //foreach (ContentArea content in contentAreas)
+                //{
+                //    //Console.WriteLine(content.Name);
+                //    JSONUtil.saveContentAreaToJSON(content);
+                //}
             }
 
             using (SoapClient soapSbx = ExactTargetServices.ExactTargetBinding(ConfigSettings.ETUsernameSbx, ConfigSettings.ETPasswordSbx))

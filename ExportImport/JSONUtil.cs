@@ -90,6 +90,21 @@ namespace ExportImport
             }
         }
 
+        public static void saveContentAreaToJSON(ContentArea contentAreaIn)
+        {
+            string directory = "C:\\SylvanJSON\\ContentAreas";
+            Directory.CreateDirectory(directory);
+
+            String filename = String.Format("{0}{1}{2}{1}{3}{4}", contentAreaIn.Name.Equals(null) || contentAreaIn.Name.Equals(String.Empty) ? "noName" : contentAreaIn.Name ,
+                "_", contentAreaIn.CustomerKey, contentAreaIn.Client.ID, ".json");
+
+            using (StreamWriter file = File.CreateText(Path.Combine(directory, filename)))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                serializer.Serialize(file, contentAreaIn);
+            }
+        }
+
         public static void saveDEToJSON(DataExtension deIn)
         {
             string directory = "C:\\SylvanJSON\\DataExtensions";
