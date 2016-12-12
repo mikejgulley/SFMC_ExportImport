@@ -22,12 +22,14 @@ namespace ExportImport
             //AccountUserUtil.DescribeAccountUser(soapClientIn);
             //RoleUtil.DescribeRole(soapClientIn);
             //EmailUtil.DescribeEmail(soapClientIn);
+            //EmailUtil.DescribeEmailSendDefinition(soapClientIn);
             //PortfolioUtil.DescribePortfolioItem(soapClientIn);
             //ContentAreaUtil.DescribeContentArea(soapClientIn);
             //ListsUtil.DescribeLists(soapClientIn);
             //SuppressionListUtil.DescribeSuppressionLists(soapClientIn);
             //PublicationListUtil.DescribePublicationLists(soapClientIn);
-            TemplateUtil.DescribeTemplate(soapClientIn);
+            //TemplateUtil.DescribeTemplate(soapClientIn);
+            TriggeredSendDefinitionUtil.DescribeSendDefinition(soapClientIn);
         }
     }
 }

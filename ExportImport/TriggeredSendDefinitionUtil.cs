@@ -7,13 +7,14 @@ using System.Threading.Tasks;
 
 namespace ExportImport
 {
-    class ListsUtil
+    class TriggeredSendDefinitionUtil
     {
-        public static void DescribeLists(SoapClient soapClientIn)
+        public static void DescribeSendDefinition(SoapClient soapClientIn)
         {
             string requestID;
+
             ObjectDefinitionRequest objDefs = new ObjectDefinitionRequest();
-            objDefs.ObjectType = "List";
+            objDefs.ObjectType = "TriggeredSendDefinition";
 
             ObjectDefinition[] definitions = soapClientIn.Describe(new ObjectDefinitionRequest[] { objDefs }, out requestID);
 
@@ -32,7 +33,7 @@ namespace ExportImport
             Console.ReadLine();
         }
 
-        public static APIObject[] GetAllLists(SoapClient soapClientIn)
+        public static APIObject[] GetAllTriggeredEmailSendDefinitions(SoapClient soapClientIn) // user-initiated
         {
             String requestID;
             String status;
@@ -51,9 +52,18 @@ namespace ExportImport
             rr.QueryAllAccounts = true;
             rr.QueryAllAccountsSpecified = true;
 
-            rr.ObjectType = "List";
-            rr.Properties = new String[] { "ID", "ObjectID", "PartnerKey", "CreatedDate", "ModifiedDate", "Client.ID", "Client.PartnerClientKey",
-                "ListName", "Description", "Category", "Type", "CustomerKey", "ListClassification", "AutomatedEmail.ID" };
+            rr.ObjectType = "TriggeredSendDefinition";
+            rr.Properties = new String[] { "ObjectID", "PartnerKey", "CreatedDate", "ModifiedDate", "Client.ID",
+                "CustomerKey", "Email.ID", "List.ID", "Name", "Description", "TriggeredSendType", "TriggeredSendStatus", "HeaderContentArea.ID",
+                "FooterContentArea.ID", "SendClassification.ObjectID", "SendClassification.CustomerKey", "SenderProfile.CustomerKey", "SenderProfile.ObjectID",
+                "DeliveryProfile.CustomerKey", "DeliveryProfile.ObjectID", "PrivateDomain.ObjectID", "PrivateIP.ID", "AutoAddSubscribers", 
+                "AutoUpdateSubscribers","BatchInterval", "FromName", "FromAddress", "BccEmail", "EmailSubject", "DynamicEmailSubject", "IsMultipart",
+                "IsWrapped", "TestEmailAddr", "AllowedSlots", "NewSlotTrigger", "SendLimit", "SendWindowOpen", "SendWindowClose", "SuppressTracking",
+                "Keyword", "List.PartnerKey", "Email.PartnerKey", "SendClassification.PartnerKey", "PrivateDomain.PartnerKey",
+                "PrivateIP.PartnerKey", "Client.PartnerClientKey", "CategoryID" };
+            // these broke the call even thought they are supposed to be valid retrievable attrs according to the Describe
+            // "DeliveryProfile.FooterContentArea.ID", "DeliveryProfile.HeaderContentArea.ID", "SendWindowCloses"
+            // "IsPlatformObject" -- breaks Name attr
 
             do
             {
@@ -67,58 +77,17 @@ namespace ExportImport
                 }
 
                 Console.WriteLine(status);
-                Console.WriteLine("Num Lists: " + totalCount);
+                Console.WriteLine("Num Email Send Defs: " + totalCount);
 
                 rr = new RetrieveRequest();
                 rr.ContinueRequest = requestID;
             } while (status.Equals("MoreDataAvailable"));
 
             totalResults = totalResultsList.ToArray<APIObject>();
-            Console.WriteLine("Total Lists: " + totalResults.Length);
+            Console.WriteLine("Total Email Send Defs: " + totalResults.Length);
 
             Console.ReadLine();
-
             return totalResults;
-        }
-
-        public static List GetListByID(SoapClient soapClientIn, int idIn)
-        {
-            String requestID;
-            String status;
-            APIObject[] results;
-            List listResult = new List();
-
-            SimpleFilterPart sfp = new SimpleFilterPart();
-            sfp.Property = "List.ID";
-            sfp.SimpleOperator = SimpleOperators.equals;
-            sfp.Value = new String[] { idIn.ToString() };
-
-            RetrieveRequest rr = new RetrieveRequest();
-
-            ClientID clientID = new ClientID();
-            clientID.ID = 7237980;
-            clientID.IDSpecified = true;
-            ClientID[] targetClientIDs = { clientID };
-            rr.ClientIDs = targetClientIDs;
-            rr.QueryAllAccounts = true;
-            rr.QueryAllAccountsSpecified = true;
-
-            rr.ObjectType = "List";
-            rr.Properties = new String[] { "ID", "ObjectID", "PartnerKey", "CreatedDate", "ModifiedDate", "Client.ID", "Client.PartnerClientKey",
-                "ListName", "Description", "Category", "Type", "CustomerKey", "ListClassification", "AutomatedEmail.ID" };
-            rr.Filter = sfp;
-
-            status = soapClientIn.Retrieve(rr, out requestID, out results);
-            Console.WriteLine(status);
-            //Console.WriteLine("Num Data Folders: " + results.Length + "\n");
-
-            foreach (List list in results)
-            {
-                //Console.WriteLine("List Name: " + list.ListName);
-                listResult = list;
-            }
-
-            return listResult;
         }
     }
 }

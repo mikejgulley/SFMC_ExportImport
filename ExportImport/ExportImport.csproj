@@ -70,6 +70,7 @@
     <Compile Include="PublicationListUtil.cs" />
     <Compile Include="QueryDefinitionUtil.cs" />
     <Compile Include="RoleUtil.cs" />
+    <Compile Include="TriggeredSendDefinitionUtil.cs" />
     <Compile Include="Service References\PartnerAPI\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

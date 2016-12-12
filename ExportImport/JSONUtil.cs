@@ -184,6 +184,20 @@ namespace ExportImport
            }
        }
 
+       public static void saveUIEmailSendDefinitionToJSON(EmailSendDefinition eSendDefIn)
+       {
+           string directory = "C:\\SylvanJSON\\SendDefinitions\\User-Initiated";
+           Directory.CreateDirectory(directory);
+
+           String filename = String.Format("{0}{1}{2}{1}{3}{4}", eSendDefIn.Name, "_", eSendDefIn.CustomerKey, eSendDefIn.Client.ID, ".json");
+
+           using (StreamWriter file = File.CreateText(Path.Combine(directory, filename)))
+           {
+               JsonSerializer serializer = new JsonSerializer();
+               serializer.Serialize(file, eSendDefIn);
+           }
+       }
+
        public static void saveImportDefToJSON(ImportDefinition idIn)
        {
            string directory = "C:\\SylvanJSON\\ImportDefinitions";
@@ -278,6 +292,20 @@ namespace ExportImport
            {
                JsonSerializer serializer = new JsonSerializer();
                serializer.Serialize(file, templateIn);
+           }
+       }
+
+       public static void saveTriggeredSendDefinitionToJSON(TriggeredSendDefinition tSendDefIn)
+       {
+           string directory = "C:\\SylvanJSON\\SendDefinitions\\Triggered";
+           Directory.CreateDirectory(directory);
+
+           String filename = String.Format("{0}{1}{2}{1}{3}{4}", tSendDefIn.Name, "_", tSendDefIn.CustomerKey, tSendDefIn.Client.ID, ".json");
+
+           using (StreamWriter file = File.CreateText(Path.Combine(directory, filename)))
+           {
+               JsonSerializer serializer = new JsonSerializer();
+               serializer.Serialize(file, tSendDefIn);
            }
        }
     }

@@ -28,6 +28,8 @@ namespace ExportImport
             APIObject[] pubLists = {};
             APIObject[] suppressionLists = {};
             APIObject[] templates = {};
+            APIObject[] emailSendDefs = {};
+            APIObject[] triggeredEmailSendDefs = {};
 
             using (SoapClient soapProd = ExactTargetServices.ExactTargetBinding(ConfigSettings.ETUsername, ConfigSettings.ETPassword))
             {
@@ -171,12 +173,34 @@ namespace ExportImport
                 //}
 
                 // Templates
-                templates = TemplateUtil.GetAllTemplates(soapProd);
+                //templates = TemplateUtil.GetAllTemplates(soapProd);
 
-                foreach (Template template in templates)
+                //foreach (Template template in templates)
+                //{
+                //    //Console.WriteLine(template.TemplateName);
+                //    JSONUtil.saveTemplateToJSON(template);
+                //}
+
+                // Email Send Definitions (User-initiated)
+                //emailSendDefs = EmailUtil.GetAllUIEmailSendDefinitions(soapProd);
+
+                //foreach (EmailSendDefinition eSendDef in emailSendDefs)
+                //{
+                //    //Console.WriteLine(eSendDef.Name);
+                //    JSONUtil.saveUIEmailSendDefinitionToJSON(eSendDef);
+                //}
+
+                // Triggered Email Send Definitions
+                triggeredEmailSendDefs = TriggeredSendDefinitionUtil.GetAllTriggeredEmailSendDefinitions(soapProd);
+
+                foreach (TriggeredSendDefinition tSendDef in triggeredEmailSendDefs)
                 {
-                    //Console.WriteLine(template.TemplateName);
-                    JSONUtil.saveTemplateToJSON(template);
+                    //Console.WriteLine(tSendDef.Name);
+
+                    tSendDef.Email = EmailUtil.GetEmailByID(soapProd, tSendDef.Email.ID);
+                    tSendDef.List = ListsUtil.GetListByID(soapProd, tSendDef.List.ID);
+
+                    JSONUtil.saveTriggeredSendDefinitionToJSON(tSendDef);
                 }
             }
 
