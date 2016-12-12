@@ -142,7 +142,7 @@ namespace ExportImport
 
             foreach (Email email in results)
             {
-                //Console.WriteLine("Email Name: " + email.Name);
+                Console.WriteLine("Email Name: " + email.Name);
                 emailResult = email;
             }
 

@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace ExportImport
 {
-    class ListsUtil
+    class SendClassificationUtil
     {
-        public static void DescribeLists(SoapClient soapClientIn)
+        public static void DescribeSendClassification(SoapClient soapClientIn)
         {
             string requestID;
             ObjectDefinitionRequest objDefs = new ObjectDefinitionRequest();
-            objDefs.ObjectType = "List";
+            objDefs.ObjectType = "SendClassification";
 
             ObjectDefinition[] definitions = soapClientIn.Describe(new ObjectDefinitionRequest[] { objDefs }, out requestID);
 
@@ -32,7 +32,7 @@ namespace ExportImport
             Console.ReadLine();
         }
 
-        public static APIObject[] GetAllLists(SoapClient soapClientIn)
+        public static APIObject[] GetAllSendClassifications(SoapClient soapClientIn)
         {
             String requestID;
             String status;
@@ -51,9 +51,10 @@ namespace ExportImport
             rr.QueryAllAccounts = true;
             rr.QueryAllAccountsSpecified = true;
 
-            rr.ObjectType = "List";
-            rr.Properties = new String[] { "ID", "ObjectID", "PartnerKey", "CreatedDate", "ModifiedDate", "Client.ID", "Client.PartnerClientKey",
-                "ListName", "Description", "Category", "Type", "CustomerKey", "ListClassification", "AutomatedEmail.ID" };
+            rr.ObjectType = "SendClassification";
+            rr.Properties = new String[] { "ObjectID", "SendClassificationType", "Name", "Description", "CustomerKey",
+                "SenderProfile.CustomerKey", "SenderProfile.ObjectID", "DeliveryProfile.CustomerKey", "DeliveryProfile.ObjectID",
+                "ArchiveEmail", "Client.ID", "Client.PartnerClientKey", "PartnerKey", "CreatedDate", "ModifiedDate" };
 
             do
             {
@@ -67,29 +68,28 @@ namespace ExportImport
                 }
 
                 Console.WriteLine(status);
-                Console.WriteLine("Num Lists: " + totalCount);
+                Console.WriteLine("Num Send Classifcations: " + totalCount);
 
                 rr = new RetrieveRequest();
                 rr.ContinueRequest = requestID;
             } while (status.Equals("MoreDataAvailable"));
 
             totalResults = totalResultsList.ToArray<APIObject>();
-            Console.WriteLine("Total Lists: " + totalResults.Length);
+            Console.WriteLine("Total Send Classifcations: " + totalResults.Length);
 
             Console.ReadLine();
-
             return totalResults;
         }
 
-        public static List GetListByID(SoapClient soapClientIn, int idIn)
+        public static SendClassification GetSendClassificationByID(SoapClient soapClientIn, int idIn)
         {
             String requestID;
             String status;
             APIObject[] results;
-            List listResult = new List();
+            SendClassification sendClassResult = new SendClassification();
 
             SimpleFilterPart sfp = new SimpleFilterPart();
-            sfp.Property = "List.ID";
+            sfp.Property = "SendClassification.ObjectID";
             sfp.SimpleOperator = SimpleOperators.equals;
             sfp.Value = new String[] { idIn.ToString() };
 
@@ -103,22 +103,23 @@ namespace ExportImport
             rr.QueryAllAccounts = true;
             rr.QueryAllAccountsSpecified = true;
 
-            rr.ObjectType = "List";
-            rr.Properties = new String[] { "ID", "ObjectID", "PartnerKey", "CreatedDate", "ModifiedDate", "Client.ID", "Client.PartnerClientKey",
-                "ListName", "Description", "Category", "Type", "CustomerKey", "ListClassification", "AutomatedEmail.ID" };
+            rr.ObjectType = "SendClassification";
+            rr.Properties = new String[] { "ObjectID", "SendClassificationType", "Name", "Description", "CustomerKey",
+                "SenderProfile.CustomerKey", "SenderProfile.ObjectID", "DeliveryProfile.CustomerKey", "DeliveryProfile.ObjectID",
+                "ArchiveEmail", "Client.ID", "Client.PartnerClientKey", "PartnerKey", "CreatedDate", "ModifiedDate" };
             rr.Filter = sfp;
 
             status = soapClientIn.Retrieve(rr, out requestID, out results);
             Console.WriteLine(status);
             //Console.WriteLine("Num Data Folders: " + results.Length + "\n");
 
-            foreach (List list in results)
+            foreach (SendClassification sClass in results)
             {
-                Console.WriteLine("List Name: " + list.ListName);
-                listResult = list;
+                Console.WriteLine("SendClassification Name: " + sClass.Name);
+                sendClassResult = sClass;
             }
 
-            return listResult;
+            return sendClassResult;
         }
     }
 }

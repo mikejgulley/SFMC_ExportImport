@@ -245,6 +245,20 @@ namespace ExportImport
            }
        }
 
+       public static void saveSendClassificationToJSON(SendClassification sendClassIn)
+       {
+           string directory = "C:\\SylvanJSON\\SendClassifications";
+           Directory.CreateDirectory(directory);
+
+           String filename = String.Format("{0}{1}{2}{1}{3}{4}", sendClassIn.Name, "_", sendClassIn.CustomerKey, sendClassIn.Client.ID, ".json");
+
+           using (StreamWriter file = File.CreateText(Path.Combine(directory, filename)))
+           {
+               JsonSerializer serializer = new JsonSerializer();
+               serializer.Serialize(file, sendClassIn);
+           }
+       }
+
        public static void saveQueryToJSON(QueryDefinition qdIn)
        {
            string directory = "C:\\SylvanJSON\\Queries";

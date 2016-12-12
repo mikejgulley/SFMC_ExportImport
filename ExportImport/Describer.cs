@@ -29,7 +29,8 @@ namespace ExportImport
             //SuppressionListUtil.DescribeSuppressionLists(soapClientIn);
             //PublicationListUtil.DescribePublicationLists(soapClientIn);
             //TemplateUtil.DescribeTemplate(soapClientIn);
-            TriggeredSendDefinitionUtil.DescribeSendDefinition(soapClientIn);
+            //TriggeredSendDefinitionUtil.DescribeSendDefinition(soapClientIn);
+            SendClassificationUtil.DescribeSendClassification(soapClientIn);
         }
     }
 }
