@@ -76,6 +76,7 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="SuppressionListUtil.cs" />
+    <Compile Include="TemplateUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
