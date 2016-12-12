@@ -24,6 +24,10 @@ namespace ExportImport
             APIObject[] emails = {};
             APIObject[] portfolioObjects = {};
             APIObject[] contentAreas = {};
+            APIObject[] lists = {};
+            APIObject[] pubLists = {};
+            APIObject[] suppressionLists = {};
+            APIObject[] templates = {};
 
             using (SoapClient soapProd = ExactTargetServices.ExactTargetBinding(ConfigSettings.ETUsername, ConfigSettings.ETPassword))
             {
@@ -31,7 +35,7 @@ namespace ExportImport
                 Console.WriteLine("Env: Prod\n");
 
                 //Describe APIObjects
-                Describer.DescribeAPIObjects(soapProd);
+                //Describer.DescribeAPIObjects(soapProd);
 
                 //Data Extensions
                 //dataExts = DataExtensionUtil.GetAllDataExtensions(soapProd);
@@ -138,6 +142,42 @@ namespace ExportImport
                 //    //Console.WriteLine(content.Name);
                 //    JSONUtil.saveContentAreaToJSON(content);
                 //}
+
+                // Lists
+                //lists = ListsUtil.GetAllLists(soapProd);
+
+                //foreach (List list in lists)
+                //{
+                //    //Console.WriteLine(list.ListName);
+                //    JSONUtil.saveListToJSON(list);
+                //}
+
+                //// Publications
+                //pubLists = PublicationListUtil.GetAllPublicationLists(soapProd);
+
+                //foreach (Publication pub in pubLists)
+                //{
+                //    Console.WriteLine(pub.Name);
+                //    //JSONUtil.savePublicationListToJSON(pubList);
+                //}
+
+                // Suppression List
+                //suppressionLists = SuppressionListUtil.GetAllSuppressionLists(soapProd);
+
+                //foreach (SuppressionListDefinition supList in suppressionLists)
+                //{
+                //    Console.WriteLine(supList.Name);
+                //    //JSONUtil.saveSuppressionListToJSON(pubList);
+                //}
+
+                // Templates
+                templates = TemplateUtil.GetAllTemplates(soapProd);
+
+                foreach (Template template in templates)
+                {
+                    //Console.WriteLine(template.TemplateName);
+                    JSONUtil.saveTemplateToJSON(template);
+                }
             }
 
             using (SoapClient soapSbx = ExactTargetServices.ExactTargetBinding(ConfigSettings.ETUsernameSbx, ConfigSettings.ETPasswordSbx))

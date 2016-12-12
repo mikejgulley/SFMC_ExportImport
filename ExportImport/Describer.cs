@@ -26,7 +26,8 @@ namespace ExportImport
             //ContentAreaUtil.DescribeContentArea(soapClientIn);
             //ListsUtil.DescribeLists(soapClientIn);
             //SuppressionListUtil.DescribeSuppressionLists(soapClientIn);
-            PublicationListUtil.DescribePublicationLists(soapClientIn);
+            //PublicationListUtil.DescribePublicationLists(soapClientIn);
+            TemplateUtil.DescribeTemplate(soapClientIn);
         }
     }
 }

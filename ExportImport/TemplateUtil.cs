@@ -7,13 +7,14 @@ using System.Threading.Tasks;
 
 namespace ExportImport
 {
-    class ListsUtil
+    class TemplateUtil
     {
-        public static void DescribeLists(SoapClient soapClientIn)
+        public static void DescribeTemplate(SoapClient soapClientIn)
         {
             string requestID;
+
             ObjectDefinitionRequest objDefs = new ObjectDefinitionRequest();
-            objDefs.ObjectType = "List";
+            objDefs.ObjectType = "Template";
 
             ObjectDefinition[] definitions = soapClientIn.Describe(new ObjectDefinitionRequest[] { objDefs }, out requestID);
 
@@ -32,7 +33,7 @@ namespace ExportImport
             Console.ReadLine();
         }
 
-        public static APIObject[] GetAllLists(SoapClient soapClientIn)
+        public static APIObject[] GetAllTemplates(SoapClient soapClientIn)
         {
             String requestID;
             String status;
@@ -51,9 +52,11 @@ namespace ExportImport
             rr.QueryAllAccounts = true;
             rr.QueryAllAccountsSpecified = true;
 
-            rr.ObjectType = "List";
-            rr.Properties = new String[] { "ID", "ObjectID", "PartnerKey", "CreatedDate", "ModifiedDate", "Client.ID", "Client.PartnerClientKey",
-                "ListName", "Description", "Category", "Type", "CustomerKey", "ListClassification", "AutomatedEmail.ID" };
+            rr.ObjectType = "Template";
+            rr.Properties = new String[] { "ObjectID", "ID", "Client.ID", "TemplateName", "LayoutHTML", "BackgroundColor",
+                "BorderColor", "BorderWidth", "Cellpadding", "Cellspacing", "Width", "Align", "ActiveFlag", "CategoryID",
+                "CategoryType", "OwnerID", "HeaderContent.ID", "HeaderContent.ObjectID", "Layout.ID", "Layout.LayoutName",
+                "CustomerKey", "TemplateSubject", "IsTemplateSubjectLocked" };
 
             do
             {
@@ -67,14 +70,14 @@ namespace ExportImport
                 }
 
                 Console.WriteLine(status);
-                Console.WriteLine("Num Lists: " + totalCount);
+                Console.WriteLine("Num Templates: " + totalCount);
 
                 rr = new RetrieveRequest();
                 rr.ContinueRequest = requestID;
             } while (status.Equals("MoreDataAvailable"));
 
             totalResults = totalResultsList.ToArray<APIObject>();
-            Console.WriteLine("Total Lists: " + totalResults.Length);
+            Console.WriteLine("Total Templates: " + totalResults.Length);
 
             Console.ReadLine();
 

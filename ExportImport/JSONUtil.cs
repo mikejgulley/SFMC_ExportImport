@@ -203,6 +203,20 @@ namespace ExportImport
            }
        }
 
+       public static void saveListToJSON(List listIn)
+       {
+           string directory = "C:\\SylvanJSON\\Lists";
+           Directory.CreateDirectory(directory);
+
+           String filename = String.Format("{0}{1}{2}{1}{3}{4}", listIn.ListName, "_", listIn.CustomerKey, listIn.Client.ID, ".json");
+
+           using (StreamWriter file = File.CreateText(Path.Combine(directory, filename)))
+           {
+               JsonSerializer serializer = new JsonSerializer();
+               serializer.Serialize(file, listIn);
+           }
+       }
+
        public static void savePortfolioItemToJSON(Portfolio portIn)
        {
            string directory = "C:\\SylvanJSON\\Portfolio";
@@ -250,6 +264,20 @@ namespace ExportImport
            {
                JsonSerializer serializer = new JsonSerializer();
                serializer.Serialize(file, roleIn);
+           }
+       }
+
+       public static void saveTemplateToJSON(Template templateIn)
+       {
+           string directory = "C:\\SylvanJSON\\Templates";
+           Directory.CreateDirectory(directory);
+
+           String filename = String.Format("{0}{1}{2}{1}{3}{4}", templateIn.TemplateName, "_", templateIn.CustomerKey, templateIn.Client.ID, ".json");
+
+           using (StreamWriter file = File.CreateText(Path.Combine(directory, filename)))
+           {
+               JsonSerializer serializer = new JsonSerializer();
+               serializer.Serialize(file, templateIn);
            }
        }
     }
