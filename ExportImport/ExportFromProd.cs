@@ -37,6 +37,7 @@ namespace ExportImport
             APIObject[] sends = { };
             APIObject[] rmmConfigs = { };
             APIObject[] brands = { };
+            APIObject[] automations = { };
 
             //Data Extensions
             //dataExts = DataExtensionUtil.GetAllDataExtensions(soapProd);
@@ -247,12 +248,22 @@ namespace ExportImport
             //}
 
             // Brands
-            brands = BrandUtil.GetAllBrands(soapClientIn);
+            //brands = BrandUtil.GetAllBrands(soapClientIn);
 
-            foreach (Brand brand in brands)
-            {
-                Console.WriteLine(brand.BrandID);
-            }
+            //foreach (Brand brand in brands)
+            //{
+            //    Console.WriteLine(brand.BrandID);
+            //}
+
+            // Automations
+            //automations = AutomationUtil.GetAllAutomations(soapClientIn);
+
+            AutomationUtil.GetAllAutomations(soapClientIn);
+
+            //foreach (Automation automation in automations)
+            //{
+            //    Console.WriteLine(automation.Name);
+            //}
         }
     }
 }
