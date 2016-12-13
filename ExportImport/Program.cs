@@ -17,7 +17,7 @@ namespace ExportImport
                 Console.WriteLine("Env: Prod\n");
 
                 //Describe APIObjects
-                //Describer.DescribeAPIObjects(soapProd);
+                Describer.DescribeAPIObjects(soapProd);
 
                 // Perform Export
                 ExportFromProd.PerformExport(soapProd);

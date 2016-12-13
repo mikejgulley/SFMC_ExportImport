@@ -32,6 +32,11 @@ namespace ExportImport
             APIObject[] emailSendDefs = { };
             APIObject[] triggeredEmailSendDefs = { };
             APIObject[] emailSendClassifications = { };
+            APIObject[] senderProfiles = { };
+            APIObject[] sendDefinitions = { };
+            APIObject[] sends = { };
+            APIObject[] rmmConfigs = { };
+            APIObject[] brands = { };
 
             //Data Extensions
             //dataExts = DataExtensionUtil.GetAllDataExtensions(soapProd);
@@ -176,15 +181,20 @@ namespace ExportImport
             //}
 
             // Email Send Definitions (User-initiated)
-            //emailSendDefs = EmailUtil.GetAllUIEmailSendDefinitions(soapProd);
+            //emailSendDefs = EmailUtil.GetAllUIEmailSendDefinitions(soapClientIn);
+            //emailSendClassifications = SendClassificationUtil.GetAllSendClassifications(soapClientIn);
 
             //foreach (EmailSendDefinition eSendDef in emailSendDefs)
             //{
-            //    //Console.WriteLine(eSendDef.Name);
+            //    Console.WriteLine(eSendDef.Name);
+            //    eSendDef.Email = EmailUtil.GetEmailByID(soapClientIn, eSendDef.Email.ID);
+            //    eSendDef.SenderProfile = SenderProfileUtil.GetSenderProfileByCustomerKey(soapClientIn, eSendDef.SenderProfile.CustomerKey);
+            //    //eSendDef.SendClassification = SendClassificationUtil.GetSendClassificationByCustomerKey(soapClientIn, eSendDef.SendClassification.CustomerKey);
+
             //    JSONUtil.saveUIEmailSendDefinitionToJSON(eSendDef);
             //}
 
-            // Email Send Definitions (User-initiated)
+            // Email Send Classifications (User-initiated)
             //emailSendClassifications = SendClassificationUtil.GetAllSendClassifications(soapClientIn);
 
             //foreach (SendClassification sendClass in emailSendClassifications)
@@ -194,17 +204,54 @@ namespace ExportImport
             //}
 
             // Triggered Email Send Definitions
-            triggeredEmailSendDefs = TriggeredSendDefinitionUtil.GetAllTriggeredEmailSendDefinitions(soapClientIn);
+            //triggeredEmailSendDefs = TriggeredSendDefinitionUtil.GetAllTriggeredEmailSendDefinitions(soapClientIn);
 
-            foreach (TriggeredSendDefinition tSendDef in triggeredEmailSendDefs)
+            //foreach (TriggeredSendDefinition tSendDef in triggeredEmailSendDefs)
+            //{
+            //    Console.WriteLine(tSendDef.Name);
+
+            //    tSendDef.Email = EmailUtil.GetEmailByID(soapClientIn, tSendDef.Email.ID);
+            //    tSendDef.List = ListsUtil.GetListByID(soapClientIn, tSendDef.List.ID);
+            //    tSendDef.SendClassification = SendClassificationUtil.GetSendClassificationByID(soapClientIn, tSendDef.SendClassification.ObjectID);
+            //    tSendDef.SendClassification.SenderProfile = SenderProfileUtil.GetSenderProfileByID(soapClientIn, tSendDef.SendClassification.SenderProfile.ObjectID);
+            //    //tSendDef.SenderProfile = SenderProfileUtil.GetSenderProfileByCustomerKey(soapClientIn, tSendDef.SenderProfile.CustomerKey);
+
+            //    JSONUtil.saveTriggeredSendDefinitionToJSON(tSendDef);
+            //}
+
+            // Sender Profiles
+            //senderProfiles = SenderProfileUtil.GetAllSenderProfiles(soapClientIn);
+
+            //foreach (SenderProfile sProfile in senderProfiles)
+            //{
+            //    //Console.WriteLine(sProfile.Name);
+            //    JSONUtil.saveSenderProfileToJSON(sProfile);
+            //}
+
+            // Sends
+            //sends = SendUtil.GetAllSends(soapClientIn);
+
+            //foreach (Send send in sends)
+            //{
+            //    Console.WriteLine(send.ID);
+            //    JSONUtil.saveSendToJSON(send);
+            //}
+
+            // RMM
+            //rmmConfigs = ReplyMailUtil.GetAllRMMConfigs(soapClientIn);
+
+            //foreach (ReplyMailManagementConfiguration rmm in rmmConfigs)
+            //{
+            //    //Console.WriteLine(rmm.EmailDisplayName);
+            //    JSONUtil.saveRMMConfigsToJSON(rmm);
+            //}
+
+            // Brands
+            brands = BrandUtil.GetAllBrands(soapClientIn);
+
+            foreach (Brand brand in brands)
             {
-                Console.WriteLine(tSendDef.Name);
-
-                tSendDef.Email = EmailUtil.GetEmailByID(soapClientIn, tSendDef.Email.ID);
-                tSendDef.List = ListsUtil.GetListByID(soapClientIn, tSendDef.List.ID);
-                //tSendDef.SendClassification = SendClassificationUtil.GetSendClassificationByID(soapClientIn, tSendDef.SendClassification.ID);
-
-                JSONUtil.saveTriggeredSendDefinitionToJSON(tSendDef);
+                Console.WriteLine(brand.BrandID);
             }
         }
     }

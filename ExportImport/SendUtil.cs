@@ -7,14 +7,13 @@ using System.Threading.Tasks;
 
 namespace ExportImport
 {
-    class TriggeredSendDefinitionUtil
+    class SendUtil
     {
-        public static void DescribeSendDefinition(SoapClient soapClientIn)
+        public static void DescribeSend(SoapClient soapClientIn)
         {
             string requestID;
-
             ObjectDefinitionRequest objDefs = new ObjectDefinitionRequest();
-            objDefs.ObjectType = "TriggeredSendDefinition";
+            objDefs.ObjectType = "Send";
 
             ObjectDefinition[] definitions = soapClientIn.Describe(new ObjectDefinitionRequest[] { objDefs }, out requestID);
 
@@ -33,7 +32,7 @@ namespace ExportImport
             Console.ReadLine();
         }
 
-        public static APIObject[] GetAllTriggeredEmailSendDefinitions(SoapClient soapClientIn) // user-initiated
+        public static APIObject[] GetAllSends(SoapClient soapClientIn)
         {
             String requestID;
             String status;
@@ -52,18 +51,15 @@ namespace ExportImport
             rr.QueryAllAccounts = true;
             rr.QueryAllAccountsSpecified = true;
 
-            rr.ObjectType = "TriggeredSendDefinition";
-            rr.Properties = new String[] { "ObjectID", "PartnerKey", "CreatedDate", "ModifiedDate", "Client.ID",
-                "CustomerKey", "Email.ID", "List.ID", "Name", "Description", "TriggeredSendType", "TriggeredSendStatus", "HeaderContentArea.ID",
-                "FooterContentArea.ID", "SendClassification.ObjectID", "SendClassification.CustomerKey", "SenderProfile.CustomerKey", "SenderProfile.ObjectID",
-                "DeliveryProfile.CustomerKey", "DeliveryProfile.ObjectID", "PrivateDomain.ObjectID", "PrivateIP.ID", "AutoAddSubscribers", 
-                "AutoUpdateSubscribers","BatchInterval", "FromName", "FromAddress", "BccEmail", "EmailSubject", "DynamicEmailSubject", "IsMultipart",
-                "IsWrapped", "TestEmailAddr", "AllowedSlots", "NewSlotTrigger", "SendLimit", "SendWindowOpen", "SendWindowClose", "SuppressTracking",
-                "Keyword", "List.PartnerKey", "Email.PartnerKey", "SendClassification.PartnerKey", "PrivateDomain.PartnerKey",
-                "PrivateIP.PartnerKey", "Client.PartnerClientKey", "CategoryID" };
-            // these broke the call even thought they are supposed to be valid retrievable attrs according to the Describe
-            // "DeliveryProfile.FooterContentArea.ID", "DeliveryProfile.HeaderContentArea.ID", "SendWindowCloses"
-            // "IsPlatformObject" -- breaks Name attr
+            rr.ObjectType = "Send";
+            rr.Properties = new String[] { "ID", "PartnerKey", "CreatedDate", "ModifiedDate", "Client.ID",
+                "Client.PartnerClientKey", "Email.ID", "Email.PartnerKey", "SendDate",
+                "FromAddress", "FromName", "Duplicates", "InvalidAddresses", "ExistingUndeliverables", "ExistingUnsubscribes",
+                "HardBounces", "SoftBounces", "OtherBounces", "ForwardedEmails", "UniqueClicks", "UniqueOpens",
+                "NumberSent", "NumberDelivered", "NumberTargeted", "NumberErrored", "NumberExcluded", "Unsubscribes",
+                "MissingAddresses", "Subject", "PreviewURL", "SentDate", "EmailName", "Status", "IsMultipart", "SendLimit",
+                "SendWindowOpen", "SendWindowClose", "IsAlwaysOn", "Additional", "BCCEmail", "EmailSendDefinition.ObjectID", 
+                "EmailSendDefinition.CustomerKey" };
 
             do
             {
@@ -77,14 +73,14 @@ namespace ExportImport
                 }
 
                 Console.WriteLine(status);
-                Console.WriteLine("Num Triggered Send Defs: " + totalCount);
+                Console.WriteLine("Num Sends: " + totalCount);
 
                 rr = new RetrieveRequest();
                 rr.ContinueRequest = requestID;
             } while (status.Equals("MoreDataAvailable"));
 
             totalResults = totalResultsList.ToArray<APIObject>();
-            Console.WriteLine("Total Triggered Send Defs: " + totalResults.Length);
+            Console.WriteLine("Total Sends: " + totalResults.Length);
 
             Console.ReadLine();
             return totalResults;

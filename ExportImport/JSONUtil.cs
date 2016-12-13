@@ -259,17 +259,109 @@ namespace ExportImport
            }
        }
 
+       public static void saveSenderProfileToJSON(SenderProfile senderProfileIn)
+       {
+           string directory = "C:\\SylvanJSON\\SenderProfiles";
+           Directory.CreateDirectory(directory);
+
+           string newName = senderProfileIn.Name;
+           string newCustomerKey = senderProfileIn.CustomerKey;
+           string filepath = String.Empty;
+
+           if (newName.Contains(@"\") || newName.Contains(@"/"))
+           {
+               newName = newName.Replace(@"\", "");
+               newName = newName.Replace(@"/", "");
+           }
+
+           if (senderProfileIn.CustomerKey.Contains(@"\") || senderProfileIn.CustomerKey.Contains(@"/"))
+           {
+               newCustomerKey = newCustomerKey.Replace(@"\", "");
+               newCustomerKey = newCustomerKey.Replace(@"/", "");
+           }
+
+           StringBuilder sb = new StringBuilder();
+           sb.Append(newName);
+           if (!newName.Equals(newCustomerKey) && !newCustomerKey.Equals(String.Empty))
+           {
+               sb.Append("_");
+               sb.Append(newCustomerKey);
+           }
+           sb.Append("_");
+           sb.Append(senderProfileIn.ID);
+           sb.Append("_");
+           sb.Append(senderProfileIn.Client.ID);
+           sb.Append(".json");
+
+           String filename = sb.ToString();
+
+           filepath = Path.Combine(directory, filename);
+
+           using (StreamWriter file = File.CreateText(filepath))
+           {
+               JsonSerializer serializer = new JsonSerializer();
+               serializer.Serialize(file, senderProfileIn);
+           }
+       }
+
+       public static void saveRMMConfigsToJSON(ReplyMailManagementConfiguration rmmIn)
+       {
+           string directory = "C:\\SylvanJSON\\RMM";
+           Directory.CreateDirectory(directory);
+
+           string newName = rmmIn.EmailDisplayName;
+           string filepath = String.Empty;
+
+           if (newName.Contains(@"\") || newName.Contains(@"/"))
+           {
+               newName = newName.Replace(@"\", "");
+               newName = newName.Replace(@"/", "");
+           }
+
+           StringBuilder sb = new StringBuilder();
+           sb.Append(newName);
+           sb.Append("_");
+           sb.Append(rmmIn.ID);
+           sb.Append("_");
+           sb.Append(rmmIn.Client.ID);
+           sb.Append(".json");
+
+           String filename = sb.ToString();
+
+           filepath = Path.Combine(directory, filename);
+
+           using (StreamWriter file = File.CreateText(filepath))
+           {
+               JsonSerializer serializer = new JsonSerializer();
+               serializer.Serialize(file, rmmIn);
+           }
+       }
+
        public static void saveQueryToJSON(QueryDefinition qdIn)
        {
            string directory = "C:\\SylvanJSON\\Queries";
            Directory.CreateDirectory(directory);
 
-           String filename = String.Format("{0}{1}{2}{1}{3}{4}", qdIn.Name, "_", qdIn.CustomerKey, qdIn.Client.ID, ".json");
+           String filename = String.Format("{0}{1}{2}{1}{3}", qdIn.Name, "_", qdIn.Client.ID, ".json");
 
            using (StreamWriter file = File.CreateText(Path.Combine(directory, filename)))
            {
                JsonSerializer serializer = new JsonSerializer();
                serializer.Serialize(file, qdIn);
+           }
+       }
+
+       public static void saveSendToJSON(Send sendIn)
+       {
+           string directory = "C:\\SylvanJSON\\Sends";
+           Directory.CreateDirectory(directory);
+
+           String filename = String.Format("{0}{1}{2}{1}{3}{4}", sendIn.ID, "_", sendIn.CustomerKey, sendIn.Client.ID, ".json");
+
+           using (StreamWriter file = File.CreateText(Path.Combine(directory, filename)))
+           {
+               JsonSerializer serializer = new JsonSerializer();
+               serializer.Serialize(file, sendIn);
            }
        }
 

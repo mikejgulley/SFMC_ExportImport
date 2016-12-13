@@ -7,14 +7,13 @@ using System.Threading.Tasks;
 
 namespace ExportImport
 {
-    class TriggeredSendDefinitionUtil
+    class BrandUtil
     {
-        public static void DescribeSendDefinition(SoapClient soapClientIn)
+        public static void DescribeBrand(SoapClient soapClientIn)
         {
             string requestID;
-
             ObjectDefinitionRequest objDefs = new ObjectDefinitionRequest();
-            objDefs.ObjectType = "TriggeredSendDefinition";
+            objDefs.ObjectType = "Brand";
 
             ObjectDefinition[] definitions = soapClientIn.Describe(new ObjectDefinitionRequest[] { objDefs }, out requestID);
 
@@ -33,7 +32,7 @@ namespace ExportImport
             Console.ReadLine();
         }
 
-        public static APIObject[] GetAllTriggeredEmailSendDefinitions(SoapClient soapClientIn) // user-initiated
+        public static APIObject[] GetAllBrands(SoapClient soapClientIn)
         {
             String requestID;
             String status;
@@ -52,18 +51,9 @@ namespace ExportImport
             rr.QueryAllAccounts = true;
             rr.QueryAllAccountsSpecified = true;
 
-            rr.ObjectType = "TriggeredSendDefinition";
-            rr.Properties = new String[] { "ObjectID", "PartnerKey", "CreatedDate", "ModifiedDate", "Client.ID",
-                "CustomerKey", "Email.ID", "List.ID", "Name", "Description", "TriggeredSendType", "TriggeredSendStatus", "HeaderContentArea.ID",
-                "FooterContentArea.ID", "SendClassification.ObjectID", "SendClassification.CustomerKey", "SenderProfile.CustomerKey", "SenderProfile.ObjectID",
-                "DeliveryProfile.CustomerKey", "DeliveryProfile.ObjectID", "PrivateDomain.ObjectID", "PrivateIP.ID", "AutoAddSubscribers", 
-                "AutoUpdateSubscribers","BatchInterval", "FromName", "FromAddress", "BccEmail", "EmailSubject", "DynamicEmailSubject", "IsMultipart",
-                "IsWrapped", "TestEmailAddr", "AllowedSlots", "NewSlotTrigger", "SendLimit", "SendWindowOpen", "SendWindowClose", "SuppressTracking",
-                "Keyword", "List.PartnerKey", "Email.PartnerKey", "SendClassification.PartnerKey", "PrivateDomain.PartnerKey",
-                "PrivateIP.PartnerKey", "Client.PartnerClientKey", "CategoryID" };
-            // these broke the call even thought they are supposed to be valid retrievable attrs according to the Describe
-            // "DeliveryProfile.FooterContentArea.ID", "DeliveryProfile.HeaderContentArea.ID", "SendWindowCloses"
-            // "IsPlatformObject" -- breaks Name attr
+            rr.ObjectType = "Brand";
+            rr.Properties = new String[] { "BrandID", "Label", "Comment", "Client.ClientID1", "Account.PartnerKey",
+                "Account.Client.PartnerClientKey" };
 
             do
             {
@@ -77,14 +67,14 @@ namespace ExportImport
                 }
 
                 Console.WriteLine(status);
-                Console.WriteLine("Num Triggered Send Defs: " + totalCount);
+                Console.WriteLine("Num Brands: " + totalCount);
 
                 rr = new RetrieveRequest();
                 rr.ContinueRequest = requestID;
             } while (status.Equals("MoreDataAvailable"));
 
             totalResults = totalResultsList.ToArray<APIObject>();
-            Console.WriteLine("Total Triggered Send Defs: " + totalResults.Length);
+            Console.WriteLine("Total Brands: " + totalResults.Length);
 
             Console.ReadLine();
             return totalResults;

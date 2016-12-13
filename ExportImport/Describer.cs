@@ -30,7 +30,11 @@ namespace ExportImport
             //PublicationListUtil.DescribePublicationLists(soapClientIn);
             //TemplateUtil.DescribeTemplate(soapClientIn);
             //TriggeredSendDefinitionUtil.DescribeSendDefinition(soapClientIn);
-            SendClassificationUtil.DescribeSendClassification(soapClientIn);
+            //SendClassificationUtil.DescribeSendClassification(soapClientIn);
+            //SenderProfileUtil.DescribeSenderProfile(soapClientIn);
+            //SendUtil.DescribeSend(soapClientIn);
+            //ReplyMailUtil.DescribeRMMConfiguration(soapClientIn);
+            //BrandUtil.DescribeBrand(soapClientIn);
         }
     }
 }
