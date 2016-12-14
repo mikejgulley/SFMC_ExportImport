@@ -47,6 +47,16 @@
         private static int midSbx = Get_midSbx();
 
         /// <summary>
+        /// ClientID of the ExactTarget App
+        /// </summary>
+        private static string clientID = Get_clientID();
+
+        /// <summary>
+        /// ClientSecret of the ExactTarget App
+        /// </summary>
+        private static string clientSecret = Get_clientSecret();
+
+        /// <summary>
         /// FTP Username to log into the ExactTarget FTP account
         /// </summary>
         private static string etFTPUsername = Get_etFTPUsername();
@@ -362,6 +372,48 @@
 
             return z;
         } // Get_midSbx
+
+        /// <summary>
+        /// Reads ClientID from App.config
+        /// </summary>
+        /// <returns>The method returns a string</returns>
+        private static string Get_clientID()
+        {
+            string z = string.Empty;
+
+            try
+            {
+                z = (string)appsettings.GetValue("ClientID", typeof(string));
+            }
+            catch (Exception)
+            {
+                //// IDEA: log event
+                z = string.Empty;
+            }
+
+            return z;
+        } // Get_clientID
+
+        /// <summary>
+        /// Reads ClientSecret from App.config
+        /// </summary>
+        /// <returns>The method returns a string</returns>
+        private static string Get_clientSecret()
+        {
+            string z = string.Empty;
+
+            try
+            {
+                z = (string)appsettings.GetValue("ClientSecret", typeof(string));
+            }
+            catch (Exception)
+            {
+                //// IDEA: log event
+                z = string.Empty;
+            }
+
+            return z;
+        } // Get_clientSecret
 
         /// <summary>
         /// Reads ETFTPUsername from App.config

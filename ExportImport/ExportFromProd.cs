@@ -255,23 +255,23 @@ namespace ExportImport
             //    Console.WriteLine(brand.BrandID);
             //}
 
-            // Automations
-            automations = AutomationUtil.GetAllAutomations(soapClientIn);
+            // Automations -- not really working
+            //automations = AutomationUtil.GetAllAutomations(soapClientIn);
 
             //AutomationUtil.GetAllAutomations(soapClientIn);
 
-            foreach (Automation automation in automations)
-            {
-                Console.WriteLine(automation.Name);
-                automation.AutomationTasks = (AutomationTask[]) AutomationTaskUtil.GetAutomationTasksByAutomation(soapClientIn, automation);
+            //foreach (Automation automation in automations)
+            //{
+            //    Console.WriteLine(automation.Name);
+            //    automation.AutomationTasks = (AutomationTask[]) AutomationTaskUtil.GetAutomationTasksByAutomation(soapClientIn, automation);
 
-                Console.WriteLine(automation.AutomationTasks.Length);
+            //    Console.WriteLine(automation.AutomationTasks.Length);
 
-                foreach (AutomationTask task in automation.AutomationTasks)
-                {
-                    Console.WriteLine(task.Name);
-                }
-            }
+            //    foreach (AutomationTask task in automation.AutomationTasks)
+            //    {
+            //        Console.WriteLine(task.Name);
+            //    }
+            //}
         }
     }
 }
