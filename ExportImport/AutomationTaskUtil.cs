@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace ExportImport
 {
-    class AutomationUtil
+    class AutomationTaskUtil
     {
-        public static void DescribeAutomation(SoapClient soapClientIn)
+        public static void DescribeAutomationTask(SoapClient soapClientIn)
         {
             string requestID;
             ObjectDefinitionRequest objDefs = new ObjectDefinitionRequest();
-            objDefs.ObjectType = "Automation";
+            objDefs.ObjectType = "AutomationTask";
 
             ObjectDefinition[] definitions = soapClientIn.Describe(new ObjectDefinitionRequest[] { objDefs }, out requestID);
 
@@ -32,7 +32,7 @@ namespace ExportImport
             Console.ReadLine();
         }
 
-        public static APIObject[] GetAllAutomations(SoapClient soapClientIn)
+        public static AutomationTask[] GetAutomationTasksByAutomation(SoapClient soapClientIn, Automation automationIn)
         {
             //String requestID;
             //String status;
@@ -114,28 +114,30 @@ namespace ExportImport
             //return rResults;
 
             var retrieveRequest = new RetrieveRequest();
-            retrieveRequest.ObjectType = "Automation";
+            retrieveRequest.ObjectType = "AutomationTask";
 
             SimpleFilterPart sf = new SimpleFilterPart();
-            sf.Property = "CustomerKey";
+            sf.Property = "Automation";
             sf.SimpleOperator = SimpleOperators.equals;
-            sf.Value = new String[] { "b7e0de14-bee8-415b-49bc-60c2d57509b8" };
+            sf.Value = new String[] { automationIn.ToString() };
             retrieveRequest.Filter = sf;
 
-            retrieveRequest.Properties = new string[] { "ProgramID", "Name", "Description", "CustomerKey", "IsActive", "CreatedDate", "ModifiedDate", "Status" };
-            //retrieveRequest.Properties = new string[] { "*" };
-            //retrieveRequest.Properties = new string[] { "Name" };
+            retrieveRequest.Properties = new string[] { "Activites", "Automation", "AutomationTaskType", "Description", "Name", "Sequence" };
 
             string requestID;
             APIObject[] results;
+            AutomationTask[] tasks = { };
             var status = soapClientIn.Retrieve(retrieveRequest, out requestID, out results);
+            int i = 0;
 
-            //foreach (Automation auto in results)
-            //{
-            //    Console.WriteLine(auto.Name);
-            //}
+            foreach (AutomationTask at in results)
+            {
+                Console.WriteLine(at.Name);
+                tasks[i] = at;
+                i++;
+            }
 
-            return results;
+            return tasks;
         }
     }
 }

@@ -256,14 +256,22 @@ namespace ExportImport
             //}
 
             // Automations
-            //automations = AutomationUtil.GetAllAutomations(soapClientIn);
+            automations = AutomationUtil.GetAllAutomations(soapClientIn);
 
-            AutomationUtil.GetAllAutomations(soapClientIn);
+            //AutomationUtil.GetAllAutomations(soapClientIn);
 
-            //foreach (Automation automation in automations)
-            //{
-            //    Console.WriteLine(automation.Name);
-            //}
+            foreach (Automation automation in automations)
+            {
+                Console.WriteLine(automation.Name);
+                automation.AutomationTasks = (AutomationTask[]) AutomationTaskUtil.GetAutomationTasksByAutomation(soapClientIn, automation);
+
+                Console.WriteLine(automation.AutomationTasks.Length);
+
+                foreach (AutomationTask task in automation.AutomationTasks)
+                {
+                    Console.WriteLine(task.Name);
+                }
+            }
         }
     }
 }

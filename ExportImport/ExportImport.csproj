@@ -50,6 +50,8 @@
   <ItemGroup>
     <Compile Include="AccountUserUtil.cs" />
     <Compile Include="AccountUtil.cs" />
+    <Compile Include="AutomationTaskUtil.cs" />
+    <Compile Include="AutomationUtil.cs" />
     <Compile Include="BrandUtil.cs" />
     <Compile Include="BusinessUnitUtil.cs" />
     <Compile Include="ConfigSettings.cs" />
