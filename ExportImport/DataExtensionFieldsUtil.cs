@@ -35,8 +35,8 @@ namespace ExportImport
         {
             deIn.CategoryIDSpecified = true;
 
-            Console.WriteLine("Current DE Name: " + deIn.Name);
-            Console.WriteLine("Current DE CategoryID: " + deIn.CategoryID);
+            //Console.WriteLine("Current DE Name: " + deIn.Name);
+            //Console.WriteLine("Current DE CategoryID: " + deIn.CategoryID);
 
             String requestID;
             String status;

@@ -90,6 +90,7 @@ namespace ExportImport
             String requestID;
             String status;
             APIObject[] results;
+            //APIObject result = new APIObject();
 
             SimpleFilterPart sfp = new SimpleFilterPart();
             sfp.Property = "Name";
@@ -109,8 +110,27 @@ namespace ExportImport
             Console.WriteLine(status);
             Console.WriteLine("Num Data Folders: " + results.Length);
 
-            rr = new RetrieveRequest();
-            rr.ContinueRequest = requestID;
+            foreach (DataFolder df in results)
+            {
+                Console.WriteLine("Data Folder Name: " + df.Name);
+                Console.WriteLine("Data Folder ID: " + df.ID);
+                Console.WriteLine("Data Folder Parent Folder ID: " + df.ParentFolder.ID);
+            }
+            
+
+            //int counter = 0;
+            //foreach(APIObject apiObject in results)
+            //{
+            //    while (counter > 1) 
+            //    {
+            //        result = apiObject;
+            //        counter++;
+            //    }
+                
+            //}
+
+            //rr = new RetrieveRequest();
+            //rr.ContinueRequest = requestID;
 
             Console.ReadLine();
 
@@ -185,12 +205,16 @@ namespace ExportImport
             String status;
 
             DataFolder datafolder = new DataFolder();
-            datafolder.Name = "API Created Folder";
-            datafolder.Description = "API Created Folder";
+            datafolder.Name = "API Created Folder 02";
+            datafolder.Description = "API Created Folder 02";
             datafolder.ParentFolder = new DataFolder();
             datafolder.ParentFolder.ID = 99425; // This is the ID of the 'Data Extensions' folder that you can get from doing a retrieve 
             datafolder.ParentFolder.IDSpecified = true;
             datafolder.ContentType = "dataextension";
+            datafolder.AllowChildren = true;
+            datafolder.AllowChildrenSpecified = true;
+            datafolder.IsEditable = true;
+            datafolder.IsEditableSpecified = true;
 
             CreateResult[] cresults = soapClientIn.Create(new CreateOptions(), new APIObject[] { datafolder }, out requestID, out status);
 
@@ -210,10 +234,22 @@ namespace ExportImport
             DataFolder datafolder = new DataFolder();
             datafolder.Name = dataFolderIn.Name;
             datafolder.Description = dataFolderIn.Description;
+            datafolder.AllowChildren = dataFolderIn.AllowChildren;
+            datafolder.AllowChildrenSpecified = dataFolderIn.AllowChildrenSpecified;
+            datafolder.ContentType = dataFolderIn.ContentType;
+            datafolder.ID = dataFolderIn.ID;
+            datafolder.IsActive = dataFolderIn.IsActive;
+            datafolder.IsEditable = dataFolderIn.IsEditable;
             datafolder.ParentFolder = dataFolderIn.ParentFolder;
-            datafolder.ParentFolder.ID = dataFolderIn.ParentFolder.ID; // This is the ID of the 'Data Extensions' folder that you can get from doing a retrieve 
+            //datafolder.ParentFolder.ID = dataFolderIn.ParentFolder.ID;  
+            //datafolder.ParentFolder.ID = 99425; // This is the ID of the 'Data Extensions' on SBX folder that you can get from doing a retrieve
+            datafolder.ParentFolder.ID = 99425;
             datafolder.ParentFolder.IDSpecified = dataFolderIn.ParentFolder.IDSpecified;
             datafolder.ContentType = dataFolderIn.ContentType;
+            datafolder.AllowChildren = true;
+            datafolder.AllowChildrenSpecified = true;
+            datafolder.IsEditable = true;
+            datafolder.IsEditableSpecified = true;
 
             CreateResult[] cresults = soapClientIn.Create(new CreateOptions(), new APIObject[] { datafolder }, out requestID, out status);
 
@@ -225,7 +261,36 @@ namespace ExportImport
             Console.WriteLine(requestID + ": " + status);
         }
 
-        // CANNOT create or delete Data Folders via API
+        public static void UpdateDataFolder(SoapClient soapClientIn, DataFolder dfIn) 
+        {
+            Console.WriteLine("Entering UpdateDataFolder()...");
+
+            String requestID;
+            String status;
+
+            dfIn.AllowChildren = true;
+            dfIn.AllowChildrenSpecified = true;
+            dfIn.IsEditable = true;
+            dfIn.IsEditableSpecified = true;
+
+            UpdateResult[] cresults = soapClientIn.Update(new UpdateOptions(), new APIObject[] { dfIn }, out requestID, out status);
+            foreach (UpdateResult result in cresults)
+            {
+                Console.WriteLine(result.StatusMessage);
+            }
+            Console.WriteLine(requestID + ": " + status);
+            Console.WriteLine("Exiting UpdateDataFolder()...");
+        }
+
+        public static void loadDataFolderFromJSON(string dfIn)
+        {
+            DataFolder df = (DataFolder)JsonConvert.DeserializeObject(dfIn);
+
+            Console.WriteLine("DataFolder Name: " + df.Name);
+            Console.WriteLine("DataFolder Parent Folder Name: " + df.ParentFolder.Name);
+        }
+
+        // CANNOT delete Data Folders via API
         //public static void DeleteDataFolder(SoapClient soapClientIn, string dataFolderNameIn)
         //{
         //    String requestID;

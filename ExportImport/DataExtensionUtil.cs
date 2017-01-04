@@ -87,6 +87,65 @@ namespace ExportImport
             return totalResults;
         }
 
+        public static APIObject[] GetAllDataExtensionsByID(SoapClient soapClientIn, int categoryIdIn)
+        {
+            String requestID;
+            String status;
+            APIObject[] results;
+            APIObject[] totalResults = { new APIObject() };
+            List<APIObject> totalResultsList = new List<APIObject>();
+            int totalCount = 0;
+
+            SimpleFilterPart sfp = new SimpleFilterPart();
+            sfp.Property = "CategoryID";
+            sfp.SimpleOperator = SimpleOperators.equals;
+            sfp.Value = new String[] { categoryIdIn.ToString() };
+
+            RetrieveRequest rr = new RetrieveRequest();
+
+            ClientID clientID = new ClientID();
+            clientID.ID = 7237980;
+            clientID.IDSpecified = true;
+            ClientID[] targetClientIDs = { clientID };
+            rr.ClientIDs = targetClientIDs;
+            rr.QueryAllAccounts = true;
+            rr.QueryAllAccountsSpecified = true;
+
+            rr.ObjectType = "DataExtension"; // the DataExtensionObject is the actual record in the DE
+            rr.Properties = new String[] { "ObjectID", "PartnerKey", "CustomerKey", "Name", "CreatedDate", "ModifiedDate", "Client.ID",
+                "Description", "IsSendable", "IsTestable", "SendableDataExtensionField.Name", "SendableSubscriberField.Name", "Template.CustomerKey",
+                "CategoryID", "Status", "DataRetentionPeriodLength", "DataRetentionPeriodUnitOfMeasure", "RowBasedRetention",
+                "ResetRetentionPeriodOnImport", "DeleteAtEndOfRetentionPeriod", "RetainUntil" };
+            // including "DataRetentionPeriod" in props causes error. ("Must specify valid information for parsing in the string")
+            // including "IsPlatformObject", makes Name come back Null
+            rr.Filter = sfp;
+
+            do
+            {
+                status = soapClientIn.Retrieve(rr, out requestID, out results);
+
+                totalCount += results.Length;
+
+                foreach (APIObject apiObject in results)
+                {
+                    totalResultsList.Add(apiObject);
+                }
+
+                Console.WriteLine(status);
+                Console.WriteLine("Num Data Extensiones: " + totalCount);
+
+                rr = new RetrieveRequest();
+                rr.ContinueRequest = requestID;
+            } while (status.Equals("MoreDataAvailable"));
+
+            totalResults = totalResultsList.ToArray<APIObject>();
+            Console.WriteLine("Total Data Extensions: " + totalResults.Length);
+
+            Console.ReadLine();
+
+            return totalResults;
+        }
+
         //public static APIObject[] GetAllSharedDataExtensions(SoapClient soapClientIn)
         //{
         //    String requestID;
@@ -174,60 +233,144 @@ namespace ExportImport
         //    return results;
         //}
 
-        public static void CreateDataExtensions(SoapClient soapClientIn, APIObject[] deArrayIn, APIObject[] deFieldsArrayIn)
+        //public static void CreateDataExtensions(SoapClient soapClientIn, APIObject[] deArrayIn, APIObject[] deFieldsArrayIn)
+        //{
+        //    String requestID = "";
+        //    String status = "";
+        //    int ctr = 0;
+
+        //    foreach (DataExtensionField def in deFieldsArrayIn)
+        //    {
+        //        while (ctr < 10)
+        //        {
+        //            Console.WriteLine(def.Name);
+        //            Console.WriteLine(def.FieldType);
+        //            Console.WriteLine(def.CustomerKey);
+        //            ctr++;
+        //        }
+        //    }
+
+        //    //foreach (DataExtension de in deArrayIn)
+        //    //{
+        //    //    DataExtension dataExt = de;
+        //    //    Console.WriteLine(dataExt.Name);
+        //    //}
+
+        //    //for (int i = 0; i < deArrayIn.Length; i++)
+        //    for (int i = 0; i < 15; i++)
+        //    {
+        //        DataExtension dataExtSrc = (DataExtension)deArrayIn[i];
+        //        DataExtension dataExtDest = new DataExtension();
+        //        DataExtensionField[] defArraySrc = new DataExtensionField[] { };
+        //        defArraySrc = dataExtSrc.Fields.ToArray();
+        //        DataExtensionField[] defArrayDest = { };
+
+        //        if (!dataExtSrc.Name.StartsWith("_") && !dataExtSrc.Name.Equals("CloudPages_DataExtension") && !dataExtSrc.Name.Equals("SocialPages_DataExtension")) // cannot copy system tables -- system tables names begin with an underscore
+        //        {
+        //            int j = 0;
+        //            Console.WriteLine(dataExtSrc.Name);
+
+        //            // get columns from source DE
+        //            foreach (DataExtensionField defSrc in defArraySrc)
+        //            {
+        //                Console.WriteLine(defArraySrc[j]);
+        //                defArrayDest[j] = defArraySrc[j];
+        //                defArrayDest[j].DataType = defSrc.DataType;
+        //                j++;
+        //            }
+
+        //            // put columns into dest DE
+        //            dataExtDest.Fields = defArraySrc;
+
+        //            CreateResult[] aoResults = soapClientIn.Create(new CreateOptions(), new APIObject[] { dataExtDest }, out requestID, out status);
+        //            Console.WriteLine("Status: " + status);
+        //            Console.WriteLine("Request ID: " + requestID);
+        //        }
+        //    }
+        //}
+
+        //public static void CreateDataExtensionsByFolderName(SoapClient soapClientIn, APIObject[] deArrayIn, string folderNameIn)
+        //{
+        //    String requestID = "";
+        //    String status = "";
+
+        //    foreach (DataExtension de in deArrayIn)
+        //    {
+        //        if (de.CategoryID == 8455) // 8455 = CategoryID in Prod for Data Feeds folder
+        //        {
+        //            DataExtension dataExtSrc = de;
+        //            DataExtension dataExtDest = new DataExtension();
+        //            DataExtensionField[] defArraySrc = new DataExtensionField[] { };
+        //            defArraySrc = dataExtSrc.Fields.ToArray();
+        //            DataExtensionField[] defArrayDest = { };
+
+        //            if (!dataExtSrc.Name.StartsWith("_") && !dataExtSrc.Name.Equals("CloudPages_DataExtension") && !dataExtSrc.Name.Equals("SocialPages_DataExtension")) // cannot copy system tables -- system tables names begin with an underscore
+        //            {
+        //                int j = 0;
+        //                Console.WriteLine(dataExtSrc.Name);
+
+        //                // get columns from source DE
+        //                foreach (DataExtensionField defSrc in defArraySrc)
+        //                {
+        //                    Console.WriteLine(defArraySrc[j]);
+        //                    defArrayDest[j] = defArraySrc[j];
+        //                    defArrayDest[j].DataType = defSrc.DataType;
+        //                    j++;
+        //                }
+
+        //                // put columns into dest DE
+        //                dataExtDest.Fields = defArraySrc;
+
+        //                CreateResult[] aoResults = soapClientIn.Create(new CreateOptions(), new APIObject[] { dataExtDest }, out requestID, out status);
+        //                Console.WriteLine("Status: " + status);
+        //                Console.WriteLine("Request ID: " + requestID);
+        //            }
+        //        }
+        //    }
+        //}
+
+        public static void CreateDataExtensionsByParentFolderID(SoapClient soapClientIn, APIObject[] deArrayIn, int prodCatIdIn)
         {
             String requestID = "";
             String status = "";
-            int ctr = 0;
 
-            foreach (DataExtensionField def in deFieldsArrayIn)
+            foreach (DataExtension de in deArrayIn)
             {
-                while (ctr < 10)
+                if (de.CategoryID == prodCatIdIn)
                 {
-                    Console.WriteLine(def.Name);
-                    Console.WriteLine(def.FieldType);
-                    Console.WriteLine(def.CustomerKey);
-                    ctr++;
-                }
-            }
+                    DataExtension dataExtSrc = de;
+                    DataExtension dataExtDest = dataExtSrc;
+                    dataExtDest.CategoryID = 102047;
+                    dataExtDest.Client.ID = 7294703;
 
-            //foreach (DataExtension de in deArrayIn)
-            //{
-            //    DataExtension dataExt = de;
-            //    Console.WriteLine(dataExt.Name);
-            //}
 
-            //for (int i = 0; i < deArrayIn.Length; i++)
-            for (int i = 0; i < 15; i++)
-            {
-                DataExtension dataExtSrc = (DataExtension) deArrayIn[i];
-                DataExtension dataExtDest = new DataExtension();
-                DataExtensionField[] defArraySrc = new DataExtensionField[] {};
-                defArraySrc = dataExtSrc.Fields.ToArray();
-                DataExtensionField[] defArrayDest = {};
-
-                if (!dataExtSrc.Name.StartsWith("_") && !dataExtSrc.Name.Equals("CloudPages_DataExtension") && !dataExtSrc.Name.Equals("SocialPages_DataExtension")) // cannot copy system tables -- system tables names begin with an underscore
-                {
-                    int j = 0;
-                    Console.WriteLine(dataExtSrc.Name);
-
-                    // get columns from source DE
-                    foreach (DataExtensionField defSrc in defArraySrc)
+                    if (!dataExtSrc.Name.StartsWith("_") && !dataExtSrc.Name.Equals("CloudPages_DataExtension") && !dataExtSrc.Name.Equals("SocialPages_DataExtension")) // cannot copy system tables -- system tables names begin with an underscore
                     {
-                        Console.WriteLine(defArraySrc[j]);
-                        defArrayDest[j] = defArraySrc[j];
-                        defArrayDest[j].DataType = defSrc.DataType;
-                        j++;
+                        CreateResult[] results = soapClientIn.Create(new CreateOptions(), new APIObject[] { dataExtDest }, out requestID, out status);
+                        Console.WriteLine("Status: " + status);
+                        Console.WriteLine("Request ID: " + requestID);
                     }
-
-                    // put columns into dest DE
-                    dataExtDest.Fields = defArraySrc;
-
-                    CreateResult[] aoResults = soapClientIn.Create(new CreateOptions(), new APIObject[] { dataExtDest }, out requestID, out status);
-                    Console.WriteLine("Status: " + status);
-                    Console.WriteLine("Request ID: " + requestID);
                 }
             }
+        }
+
+        public static void CreateDataExtensionFromExistingInProd(SoapClient soapClientIn, DataExtension deIn)
+        {
+            String requestID;
+            String status;
+
+            DataExtension de = new DataExtension();
+            de.Name = deIn.Name;
+            de.Description = deIn.Description;
+
+            CreateResult[] cresults = soapClientIn.Create(new CreateOptions(), new APIObject[] { de }, out requestID, out status);
+
+            foreach (CreateResult result in cresults)
+            {
+                Console.WriteLine(result.StatusMessage);
+            }
+
+            Console.WriteLine(requestID + ": " + status);
         }
     }
 }

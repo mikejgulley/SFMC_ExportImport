@@ -11,47 +11,92 @@ namespace ExportImport
     {
         static void Main(string[] args)
         {
+            APIObject[] dataFolders = { };
+            APIObject[] dataExts = { };
+            APIObject[] dataExtensionFields = { };
+
             using (SoapClient soapProd = ExactTargetServices.ExactTargetBinding(ConfigSettings.ETUsername, ConfigSettings.ETPassword))
             {
                 // soapProd.Close(); -- when using 'using' - no need to use soapProd.Close()
                 Console.WriteLine("Env: Prod\n");
 
                 //Describe APIObjects
-                Describer.DescribeAPIObjects(soapProd);
+                //Describer.DescribeAPIObjects(soapProd);
 
                 // Perform Export
-                ExportFromProd.PerformExport(soapProd);
+                //ExportFromProd.PerformExport(soapProd);
+
+                //----------------------------------------------------------------------------------
+                
+                // Data Folders
+                //dataFolders = DataFolderUtil.GetAllDataFolders(soapProd);
+
+                //foreach (DataFolder df in dataFolders)
+                //{
+                //    JSONUtil.saveDataFolderToJSON(df);
+                //}
+
+                //Console.WriteLine("...");
+                //Console.ReadLine();
+
+                //---------------------------------------------------------------------------------
+                // Data Extensions
+                dataExts = DataExtensionUtil.GetAllDataExtensionsByID(soapProd, 8455);
+                Console.WriteLine("Num DE's: " + dataExts.Length);
+
+                foreach (DataExtension de in dataExts)
+                {
+                    de.Fields = (DataExtensionField[])DataExtensionFieldsUtil.GetDataExtensionFieldsByDECustomerKey(soapProd, de);
+                }
+
+                //Console.WriteLine("...");
+                //Console.ReadLine();
             }
 
             using (SoapClient soapSbx = ExactTargetServices.ExactTargetBinding(ConfigSettings.ETUsernameSbx, ConfigSettings.ETPasswordSbx))
             {
                 Console.WriteLine("Env: Sbx\n");
-                //DataExtensionUtil.CreateDataExtensions(soapSbx, dataExts, dataExtFields);
-                //APIObject[] dfArray = DataFolderUtil.GetAllDataFoldersByType(soapSbx, "dataextension");
+                //--------------------------------------------------------------------------------------------
 
-                //foreach (DataFolder df in dfArray)
+                //DataFolder df = new DataFolder();
+
+                //foreach(DataFolder df2 in DataFolderUtil.GetDataFolderByName(soapSbx, "API Created Folder"))
                 //{
-                //    Console.WriteLine("Data Folder Name: " + df.Name);
-                //    Console.WriteLine("Data Folder ID: " + df.ID);
+                //    df = df2;
                 //}
 
-                //Console.ReadLine();
+                //DataFolderUtil.UpdateDataFolder(soapSbx, df);
 
-                //DataFolderUtil.CreateDataFolder(soapSbx);
-
+                //--------------------------------------------------------------------------------------------
+                // Creating Data Feeds folder in SBX based on same folder in Prod
                 //int counter = 0;
+                //int fileCounter = 1;
 
                 //foreach (DataFolder df in dataFolders)
                 //{
-                //    while (counter < 10)
-                //    {
-                //        Console.WriteLine("Creating Data Folder: " + df.Name);
-                //        DataFolderUtil.CreateDataFolderFromExistingInProd(soapSbx, df);
-                //        counter++;
-                //    }
+                //    Console.WriteLine("File Count: " + fileCounter);
+                //    //while (counter < 3)
+                //    //{
+                //        //if (df.ParentFolder.ID != 0)
+                //        //if (!df.Name.StartsWith("_") && df.Client.ID == 7237980 && df.ParentFolder.ID != 0)
+                //        if (df.Name.Equals("Data Feeds") && df.ID == 8455)
+                //        {
+                //            Console.WriteLine("Creating Data Folder: " + df.Name);
+                //            Console.WriteLine("Data Folder Content Type: " + df.ContentType);
+                //            DataFolderUtil.CreateDataFolderFromExistingInProd(soapSbx, df);
+                //            counter++;
+                //        }
+                //    //}
+                    
+                //    fileCounter++;
                 //}
 
-                
+                //--------------------------------------------------------------------------------------------
+                // Creating Data Extensions in Data Feeds folder based on DE's in Prod
+                //DataFolderUtil.GetDataFolderByName(soapSbx, "Data Extensions");
+                DataExtensionUtil.CreateDataExtensionsByParentFolderID(soapSbx, dataExts, 8455);
+
+
             }
             
         }
