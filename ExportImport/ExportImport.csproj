@@ -55,9 +55,6 @@
     <Compile Include="AutomationUtil.cs" />
     <Compile Include="BrandUtil.cs" />
     <Compile Include="BusinessUnitUtil.cs" />
-    <Compile Include="Class1.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="ConfigSettings.cs" />
     <Compile Include="ContentAreaUtil.cs" />
     <Compile Include="DataExtensionFieldsUtil.cs" />
