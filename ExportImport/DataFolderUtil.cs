@@ -234,22 +234,21 @@ namespace ExportImport
             DataFolder datafolder = new DataFolder();
             datafolder.Name = dataFolderIn.Name;
             datafolder.Description = dataFolderIn.Description;
-            datafolder.AllowChildren = dataFolderIn.AllowChildren;
-            datafolder.AllowChildrenSpecified = dataFolderIn.AllowChildrenSpecified;
+            //datafolder.AllowChildren = dataFolderIn.AllowChildren;
+            //datafolder.AllowChildrenSpecified = dataFolderIn.AllowChildrenSpecified;
+            datafolder.AllowChildren = true;
+            datafolder.AllowChildrenSpecified = true;
             datafolder.ContentType = dataFolderIn.ContentType;
             datafolder.ID = dataFolderIn.ID;
             datafolder.IsActive = dataFolderIn.IsActive;
-            datafolder.IsEditable = dataFolderIn.IsEditable;
-            datafolder.ParentFolder = dataFolderIn.ParentFolder;
-            //datafolder.ParentFolder.ID = dataFolderIn.ParentFolder.ID;  
-            //datafolder.ParentFolder.ID = 99425; // This is the ID of the 'Data Extensions' on SBX folder that you can get from doing a retrieve
-            datafolder.ParentFolder.ID = 99425;
-            datafolder.ParentFolder.IDSpecified = dataFolderIn.ParentFolder.IDSpecified;
-            datafolder.ContentType = dataFolderIn.ContentType;
-            datafolder.AllowChildren = true;
-            datafolder.AllowChildrenSpecified = true;
+            datafolder.IsActiveSpecified = dataFolderIn.IsActiveSpecified;
+            //datafolder.IsEditable = dataFolderIn.IsEditable;
+            //datafolder.IsEditableSpecified = dataFolderIn.IsEditableSpecified;
             datafolder.IsEditable = true;
             datafolder.IsEditableSpecified = true;
+            datafolder.ParentFolder = dataFolderIn.ParentFolder;
+            datafolder.ParentFolder.ID = 99425;
+            datafolder.ParentFolder.IDSpecified = true;
 
             CreateResult[] cresults = soapClientIn.Create(new CreateOptions(), new APIObject[] { datafolder }, out requestID, out status);
 
@@ -257,6 +256,12 @@ namespace ExportImport
             {
                 Console.WriteLine(result.StatusMessage);
             }
+
+            //foreach (DataFolder df in cresults)
+            //{
+            //    Console.WriteLine("Creating Data Folder: " + df.Name);
+            //    Console.WriteLine("Data Folder Content Type: " + df.ContentType);    
+            //}
 
             Console.WriteLine(requestID + ": " + status);
         }

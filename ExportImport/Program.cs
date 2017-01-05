@@ -41,7 +41,8 @@ namespace ExportImport
 
                 //---------------------------------------------------------------------------------
                 // Data Extensions
-                dataExts = DataExtensionUtil.GetAllDataExtensionsByID(soapProd, 8455);
+                //DataFolderUtil.GetDataFolderByName(soapProd, "Data Views");
+                dataExts = DataExtensionUtil.GetAllDataExtensionsByID(soapProd, 82914); // 8455 = Data Feeds; 82914 = Data Views
                 Console.WriteLine("Num DE's: " + dataExts.Length);
 
                 foreach (DataExtension de in dataExts)
@@ -77,26 +78,32 @@ namespace ExportImport
                 //    Console.WriteLine("File Count: " + fileCounter);
                 //    //while (counter < 3)
                 //    //{
-                //        //if (df.ParentFolder.ID != 0)
-                //        //if (!df.Name.StartsWith("_") && df.Client.ID == 7237980 && df.ParentFolder.ID != 0)
-                //        if (df.Name.Equals("Data Feeds") && df.ID == 8455)
-                //        {
-                //            Console.WriteLine("Creating Data Folder: " + df.Name);
-                //            Console.WriteLine("Data Folder Content Type: " + df.ContentType);
-                //            DataFolderUtil.CreateDataFolderFromExistingInProd(soapSbx, df);
-                //            counter++;
-                //        }
+                //    //if (df.ParentFolder.ID != 0)
+                //    //if (!df.Name.StartsWith("_") && df.Client.ID == 7237980 && df.ParentFolder.ID != 0)
+                //    if (df.Name.Equals("Data Feeds") && df.ID == 8455)
+                //    {
+                //        Console.WriteLine("Creating Data Folder: " + df.Name);
+                //        Console.WriteLine("Data Folder Content Type: " + df.ContentType);
+                //        DataFolderUtil.CreateDataFolderFromExistingInProd(soapSbx, df);
+                //        counter++;
+                //    }
                 //    //}
-                    
+
                 //    fileCounter++;
                 //}
 
                 //--------------------------------------------------------------------------------------------
                 // Creating Data Extensions in Data Feeds folder based on DE's in Prod
-                //DataFolderUtil.GetDataFolderByName(soapSbx, "Data Extensions");
-                DataExtensionUtil.CreateDataExtensionsByParentFolderID(soapSbx, dataExts, 8455);
+                //DataFolderUtil.GetDataFolderByName(soapSbx, "Data Views");
+                //DataExtensionUtil.CreateDataExtensionsByParentFolderID(soapSbx, dataExts, 8455);
+                //DataExtensionUtil.GetDataExtensionByName(soapSbx, "RPAreaOfInterest");
 
-
+                Console.WriteLine("Creating Data Extensions...");
+                Console.ReadLine();
+                foreach (DataExtension de in dataExts)
+                {
+                    DataExtensionUtil.CreateDataExtensionFromExistingInProd(soapSbx, de, 102133); // 102133 = Data View; 102118 = Data Feeds; 99425 = DE folder;
+                }
             }
             
         }
