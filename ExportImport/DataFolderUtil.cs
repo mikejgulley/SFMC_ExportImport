@@ -114,7 +114,7 @@ namespace ExportImport
             {
                 Console.WriteLine("Data Folder Name: " + df.Name);
                 Console.WriteLine("Data Folder ID: " + df.ID);
-                Console.WriteLine("Data Folder Parent Folder ID: " + df.ParentFolder.ID);
+                Console.WriteLine("Data Folder Parent Folder ID: " + df.ParentFolder.ID + "\n");
             }
             
 
@@ -257,11 +257,39 @@ namespace ExportImport
                 Console.WriteLine(result.StatusMessage);
             }
 
-            //foreach (DataFolder df in cresults)
-            //{
-            //    Console.WriteLine("Creating Data Folder: " + df.Name);
-            //    Console.WriteLine("Data Folder Content Type: " + df.ContentType);    
-            //}
+            Console.WriteLine(requestID + ": " + status);
+        }
+
+        public static void CreateDataFolderFromExistingInProdByParentFolderID(SoapClient soapClientIn, DataFolder dataFolderIn, int folderIdIn)
+        {
+            String requestID;
+            String status;
+
+            DataFolder datafolder = new DataFolder();
+            datafolder.Name = dataFolderIn.Name;
+            datafolder.Description = dataFolderIn.Description;
+            //datafolder.AllowChildren = dataFolderIn.AllowChildren;
+            //datafolder.AllowChildrenSpecified = dataFolderIn.AllowChildrenSpecified;
+            datafolder.AllowChildren = true;
+            datafolder.AllowChildrenSpecified = true;
+            datafolder.ContentType = dataFolderIn.ContentType;
+            datafolder.ID = dataFolderIn.ID;
+            datafolder.IsActive = dataFolderIn.IsActive;
+            datafolder.IsActiveSpecified = dataFolderIn.IsActiveSpecified;
+            //datafolder.IsEditable = dataFolderIn.IsEditable;
+            //datafolder.IsEditableSpecified = dataFolderIn.IsEditableSpecified;
+            datafolder.IsEditable = true;
+            datafolder.IsEditableSpecified = true;
+            datafolder.ParentFolder = dataFolderIn.ParentFolder;
+            datafolder.ParentFolder.ID = folderIdIn;
+            datafolder.ParentFolder.IDSpecified = true;
+
+            CreateResult[] cresults = soapClientIn.Create(new CreateOptions(), new APIObject[] { datafolder }, out requestID, out status);
+
+            foreach (CreateResult result in cresults)
+            {
+                Console.WriteLine(result.StatusMessage);
+            }
 
             Console.WriteLine(requestID + ": " + status);
         }

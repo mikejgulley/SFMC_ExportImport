@@ -73,7 +73,7 @@ namespace ExportImport
                 }
 
                 Console.WriteLine(status);
-                Console.WriteLine("Num Data Extensiones: " + totalCount);
+                Console.WriteLine("Num Data Extensions: " + totalCount);
 
                 rr = new RetrieveRequest();
                 rr.ContinueRequest = requestID;
@@ -87,7 +87,7 @@ namespace ExportImport
             return totalResults;
         }
 
-        public static APIObject[] GetAllDataExtensionsByID(SoapClient soapClientIn, int categoryIdIn)
+        public static APIObject[] GetAllDataExtensionsByCategoryID(SoapClient soapClientIn, int categoryIdIn)
         {
             String requestID;
             String status;
@@ -132,7 +132,7 @@ namespace ExportImport
                 }
 
                 Console.WriteLine(status);
-                Console.WriteLine("Num Data Extensiones: " + totalCount);
+                Console.WriteLine("Num Data Extensions: " + totalCount);
 
                 rr = new RetrieveRequest();
                 rr.ContinueRequest = requestID;
@@ -197,7 +197,7 @@ namespace ExportImport
                 }
 
                 Console.WriteLine(status);
-                Console.WriteLine("Num Data Extensiones: " + totalCount);
+                Console.WriteLine("Num Data Extensions: " + totalCount);
 
                 rr = new RetrieveRequest();
                 rr.ContinueRequest = requestID;
@@ -440,6 +440,8 @@ namespace ExportImport
             de.DataRetentionPeriod = deIn.DataRetentionPeriod;
             de.DataRetentionPeriodLength = deIn.DataRetentionPeriodLength;
             de.DataRetentionPeriodLengthSpecified = deIn.DataRetentionPeriodLengthSpecified;
+            de.DataRetentionPeriodUnitOfMeasure = deIn.DataRetentionPeriodUnitOfMeasure;
+            de.DataRetentionPeriodUnitOfMeasureSpecified = deIn.DataRetentionPeriodUnitOfMeasureSpecified;
             de.DeleteAtEndOfRetentionPeriod = deIn.DeleteAtEndOfRetentionPeriod;
             de.DeleteAtEndOfRetentionPeriodSpecified = deIn.DeleteAtEndOfRetentionPeriodSpecified;
             de.Description = deIn.Description;
@@ -488,6 +490,7 @@ namespace ExportImport
             }
 
             Console.WriteLine(requestID + ": " + status);
+            Console.WriteLine("Data Extension Name: " + de.Name);
             Console.WriteLine("Exiting CreateDataExtensionFromExistingInProd()...\n");
         }
     }

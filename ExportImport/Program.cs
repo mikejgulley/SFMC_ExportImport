@@ -11,7 +11,25 @@ namespace ExportImport
     {
         static void Main(string[] args)
         {
+            // Data Folder ID's - PROD
+            // Data Feeds = 8455; Data Views = 82914; Exclusion = 9218; Journey Builder = 82920; Processing = 9201; CASL = 10610; Nightly Candidate RP Process = 9595; 
+            // VOC = 11058; Appointment Confirmation = 83625; Appointment Reminder = 83632; Appointment Survey Resend = 86029; Connector - Booked = 83432; Connector - December = ;
+            // Connector - January = 101939; Connector - November = ; Connector - October = ; Connector - September EDGE = ; Connector - September Prep = ;
+            // Connector - Tested = 83211; Enrolled Welcome = 83214; Handraiser = 83215; Inquiry Connector and NonConnector = 83216; Online Registration Abandon = 83217;
+            // Candidate ID Generation = 9593; Email Consents = 84057; Explicit = 82031; Implicit = 82032; Emma Manual Unsubscribe = 88858; Adding and Updating = 9609; Comparing = 9610;
+            // File Generation = 11059; Results = 11060;
+
+            // Data Folder ID's - SBX
+            // Data View = 102133; Data Feeds = 102118; DE folder = 99425; Exclusion = 102135; Journey Builder = 102140; Processing = 102134; CASL = 102196; 
+            // Nightly Candidate RP Process = 102195; VOC = 102197; Appointment Confirmation = 102170; Appointment Reminder = 102171; Appointment Survey Resend = 102172; 
+            // Connector - Booked = 102168; Connector - December = ; Connector - January = 102176; Connector - November = ; Connector - October = ; Connector - September EDGE = ;
+            // Connector - September Prep = ; Connector - Tested = 102162; Enrolled Welcome = 102163; Handraiser = 102164; Inquiry Connector and NonConnector = 102165;
+            // Online Registration Abandon = 102166; Candidate ID Generation = 102194; Email Consents = 102206; Explicit = 102204; Implicit = 102205; Emma Manual Unsubscribe = 102198;
+            // Adding and Updating = 102207; Comparing = 102208; File Generation = 102209; Results = 102210;
+
             APIObject[] dataFolders = { };
+            List<APIObject> dataFoldersByParent = new List<APIObject>();
+            APIObject[] dataFoldersByParentArray = { }; 
             APIObject[] dataExts = { };
             APIObject[] dataExtensionFields = { };
 
@@ -27,9 +45,24 @@ namespace ExportImport
                 //ExportFromProd.PerformExport(soapProd);
 
                 //----------------------------------------------------------------------------------
-                
                 // Data Folders
+                //DataFolderUtil.GetDataFolderByName(soapProd, "Results");
+
                 //dataFolders = DataFolderUtil.GetAllDataFolders(soapProd);
+
+                //foreach (DataFolder df in dataFolders)
+                //{
+                //    if (df.ParentFolder.ID == 11058)
+                //    {
+                //        dataFoldersByParent.Add(df);
+                //    }
+                //}
+
+                //dataFoldersByParentArray = dataFoldersByParent.ToArray();
+                //Console.WriteLine("Num Data Folder By Parent ID: " + dataFoldersByParentArray.Length);
+
+                //---------------------------------------------------------------------------------
+                // Save Data Folders
 
                 //foreach (DataFolder df in dataFolders)
                 //{
@@ -41,8 +74,8 @@ namespace ExportImport
 
                 //---------------------------------------------------------------------------------
                 // Data Extensions
-                //DataFolderUtil.GetDataFolderByName(soapProd, "Data Views");
-                dataExts = DataExtensionUtil.GetAllDataExtensionsByID(soapProd, 82914); // 8455 = Data Feeds; 82914 = Data Views
+                //DataFolderUtil.GetDataFolderByName(soapProd, "Exclusion");
+                dataExts = DataExtensionUtil.GetAllDataExtensionsByCategoryID(soapProd, 82032);
                 Console.WriteLine("Num DE's: " + dataExts.Length);
 
                 foreach (DataExtension de in dataExts)
@@ -93,16 +126,26 @@ namespace ExportImport
                 //}
 
                 //--------------------------------------------------------------------------------------------
+                // Data Folders -- Create folders by Parent Folder ID
+                //DataFolderUtil.GetDataFolderByName(soapSbx, "VOC");
+                //foreach (DataFolder df in dataFoldersByParentArray)
+                //{
+                //    Console.WriteLine("Creating Data Folder: " + df.Name);
+                //    DataFolderUtil.CreateDataFolderFromExistingInProdByParentFolderID(soapSbx, df, 102170);
+                //}
+                
+
+                //--------------------------------------------------------------------------------------------
                 // Creating Data Extensions in Data Feeds folder based on DE's in Prod
-                //DataFolderUtil.GetDataFolderByName(soapSbx, "Data Views");
+                //DataFolderUtil.GetDataFolderByName(soapSbx, "Results");
                 //DataExtensionUtil.CreateDataExtensionsByParentFolderID(soapSbx, dataExts, 8455);
                 //DataExtensionUtil.GetDataExtensionByName(soapSbx, "RPAreaOfInterest");
 
-                Console.WriteLine("Creating Data Extensions...");
-                Console.ReadLine();
+                //Console.WriteLine("Creating Data Extensions...");
+                //Console.ReadLine();
                 foreach (DataExtension de in dataExts)
                 {
-                    DataExtensionUtil.CreateDataExtensionFromExistingInProd(soapSbx, de, 102133); // 102133 = Data View; 102118 = Data Feeds; 99425 = DE folder;
+                    DataExtensionUtil.CreateDataExtensionFromExistingInProd(soapSbx, de, 102205);
                 }
             }
             
