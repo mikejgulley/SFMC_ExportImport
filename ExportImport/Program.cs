@@ -17,7 +17,8 @@ namespace ExportImport
             // Connector - January = 101939; Connector - November = ; Connector - October = ; Connector - September EDGE = ; Connector - September Prep = ;
             // Connector - Tested = 83211; Enrolled Welcome = 83214; Handraiser = 83215; Inquiry Connector and NonConnector = 83216; Online Registration Abandon = 83217;
             // Candidate ID Generation = 9593; Email Consents = 84057; Explicit = 82031; Implicit = 82032; Emma Manual Unsubscribe = 88858; Adding and Updating = 9609; Comparing = 9610;
-            // File Generation = 11059; Results = 11060;
+            // File Generation = 11059; Results = 11060; Flat Data = 82928; Backfeed = 59036; User Associations = 83142; Activity Report = 83791; Tracking Imports = 88801;
+            // My Templates = 807;
 
             // Data Folder ID's - SBX
             // Data View = 102133; Data Feeds = 102118; DE folder = 99425; Exclusion = 102135; Journey Builder = 102140; Processing = 102134; CASL = 102196; 
@@ -25,13 +26,18 @@ namespace ExportImport
             // Connector - Booked = 102168; Connector - December = ; Connector - January = 102176; Connector - November = ; Connector - October = ; Connector - September EDGE = ;
             // Connector - September Prep = ; Connector - Tested = 102162; Enrolled Welcome = 102163; Handraiser = 102164; Inquiry Connector and NonConnector = 102165;
             // Online Registration Abandon = 102166; Candidate ID Generation = 102194; Email Consents = 102206; Explicit = 102204; Implicit = 102205; Emma Manual Unsubscribe = 102198;
-            // Adding and Updating = 102207; Comparing = 102208; File Generation = 102209; Results = 102210;
+            // Adding and Updating = 102207; Comparing = 102208; File Generation = 102209; Results = 102210; Flat Data = 102256; Backfeed = 102257; User Associations = 102258;
+            // Activity Report = 102259; Tracking Imports = 102260; My Templates = 99398;
 
             APIObject[] dataFolders = { };
             List<APIObject> dataFoldersByParent = new List<APIObject>();
             APIObject[] dataFoldersByParentArray = { }; 
             APIObject[] dataExts = { };
             APIObject[] dataExtensionFields = { };
+            APIObject[] propertyDefs = { };
+            APIObject[] automations = { };
+            APIObject[] roles = { };
+            APIObject[] templates = { };
 
             using (SoapClient soapProd = ExactTargetServices.ExactTargetBinding(ConfigSettings.ETUsername, ConfigSettings.ETPassword))
             {
@@ -46,7 +52,7 @@ namespace ExportImport
 
                 //----------------------------------------------------------------------------------
                 // Data Folders
-                //DataFolderUtil.GetDataFolderByName(soapProd, "Results");
+                //DataFolderUtil.GetDataFolderByName(soapProd, "My Templates");
 
                 //dataFolders = DataFolderUtil.GetAllDataFolders(soapProd);
 
@@ -75,16 +81,41 @@ namespace ExportImport
                 //---------------------------------------------------------------------------------
                 // Data Extensions
                 //DataFolderUtil.GetDataFolderByName(soapProd, "Exclusion");
-                dataExts = DataExtensionUtil.GetAllDataExtensionsByCategoryID(soapProd, 82032);
-                Console.WriteLine("Num DE's: " + dataExts.Length);
+                //dataExts = DataExtensionUtil.GetAllDataExtensionsByCategoryID(soapProd, 88801);
+                //Console.WriteLine("Num DE's: " + dataExts.Length);
 
-                foreach (DataExtension de in dataExts)
-                {
-                    de.Fields = (DataExtensionField[])DataExtensionFieldsUtil.GetDataExtensionFieldsByDECustomerKey(soapProd, de);
-                }
+                //foreach (DataExtension de in dataExts)
+                //{
+                //    de.Fields = (DataExtensionField[])DataExtensionFieldsUtil.GetDataExtensionFieldsByDECustomerKey(soapProd, de);
+                //}
 
                 //Console.WriteLine("...");
                 //Console.ReadLine();
+
+                //---------------------------------------------------------------------------------
+                // Profile Attributes
+                //propertyDefs = PropertyDefinitionUtil.GetAllPropertyDefinitions(soapProd);
+
+                //---------------------------------------------------------------------------------
+                // Automations
+                //automations = AutomationUtil.GetAutomationByCustomerKey(soapProd, "b7e0de14-bee8-415b-49bc-60c2d57509b8");
+                //AutomationTaskUtil.GetAutomationTasksByAutomation(soapProd);
+
+                //---------------------------------------------------------------------------------
+                // Roles
+                //roles = RoleUtil.GetUserRoleByName(soapProd, "FranchiseeUser"); // SBX is not currently configured to allow Role creation.
+
+                // Templates
+                //templates = TemplateUtil.GetAllTemplates(soapProd);
+                templates = TemplateUtil.GetTemplateByCategoryId(soapProd, 807);
+
+                foreach (Template template in templates)
+                {
+                    Console.WriteLine("Template: " + template.TemplateName);
+                    //JSONUtil.saveTemplateToJSON(template);
+                }
+
+                Console.ReadLine();
             }
 
             using (SoapClient soapSbx = ExactTargetServices.ExactTargetBinding(ConfigSettings.ETUsernameSbx, ConfigSettings.ETPasswordSbx))
@@ -137,16 +168,30 @@ namespace ExportImport
 
                 //--------------------------------------------------------------------------------------------
                 // Creating Data Extensions in Data Feeds folder based on DE's in Prod
-                //DataFolderUtil.GetDataFolderByName(soapSbx, "Results");
+                //DataFolderUtil.GetDataFolderByName(soapSbx, "My Templates");
                 //DataExtensionUtil.CreateDataExtensionsByParentFolderID(soapSbx, dataExts, 8455);
                 //DataExtensionUtil.GetDataExtensionByName(soapSbx, "RPAreaOfInterest");
 
                 //Console.WriteLine("Creating Data Extensions...");
                 //Console.ReadLine();
-                foreach (DataExtension de in dataExts)
+                //foreach (DataExtension de in dataExts)
+                //{
+                //    DataExtensionUtil.CreateDataExtensionFromExistingInProd(soapSbx, de, 102260);
+                //}
+
+                //---------------------------------------------------------------------------------
+                // Create Role
+                //foreach (Role role in roles)
+                //{
+                //    RoleUtil.CreateRoleFromExistingInProd(soapSbx, role);    
+                //}
+
+                // Templates
+                foreach (Template temp in templates)
                 {
-                    DataExtensionUtil.CreateDataExtensionFromExistingInProd(soapSbx, de, 102205);
+                    TemplateUtil.CreateTemplateFromExisting(soapSbx, temp, 99398);
                 }
+                
             }
             
         }

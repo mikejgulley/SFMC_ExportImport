@@ -69,6 +69,7 @@
     <Compile Include="JSONUtil.cs" />
     <Compile Include="ListsUtil.cs" />
     <Compile Include="PortfolioUtil.cs" />
+    <Compile Include="PropertyDefinitionUtil.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PublicationListUtil.cs" />

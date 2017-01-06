@@ -256,9 +256,9 @@ namespace ExportImport
             //}
 
             // Automations -- not really working
-            //automations = AutomationUtil.GetAllAutomations(soapClientIn);
+            //automations = AutomationUtil.GetAutomationByCustomerKey(soapClientIn);
 
-            //AutomationUtil.GetAllAutomations(soapClientIn);
+            //AutomationUtil.GetAutomationByCustomerKey(soapClientIn);
 
             //foreach (Automation automation in automations)
             //{

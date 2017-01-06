@@ -95,7 +95,7 @@ namespace ExportImport
 
             RetrieveRequest rr = new RetrieveRequest();
 
-            rr.ObjectType = "PermissionSet";
+            rr.ObjectType = "Permission";
             rr.Properties = new String[] { "ObjectID", "CustomerKey", "Name", "Description", "IsPrivate", "IsSystemDefined",
                 "Client.EnterpriseID", "Client.ID", "Client.CreatedBy", "CreatedDate", "Client.ModifiedBy", "ModifiedDate" };
             // Trying to also retrieve "PermissionSets" and "Permissions" caused an error
@@ -103,7 +103,7 @@ namespace ExportImport
             status = soapClientIn.Retrieve(rr, out requestID, out results);
 
             Console.WriteLine(status);
-            Console.WriteLine("Num Roles: " + results.Length);
+            Console.WriteLine("Num Permissions: " + results.Length);
 
             Console.ReadLine();
 
@@ -158,6 +158,73 @@ namespace ExportImport
             Console.ReadLine();
 
             return results;
+        }
+
+        public static APIObject[] GetUserRoleByName(SoapClient soapClientIn, String nameIn)
+        {
+            String requestID;
+            String status;
+            APIObject[] results;
+
+            RetrieveRequest rr = new RetrieveRequest();
+
+            ClientID clientID = new ClientID();
+            clientID.ID = 7237980;
+            clientID.IDSpecified = true;
+            ClientID[] targetClientIDs = { clientID };
+            rr.ClientIDs = targetClientIDs;
+            rr.QueryAllAccounts = true;
+            rr.QueryAllAccountsSpecified = true;
+
+            SimpleFilterPart sfp = new SimpleFilterPart();
+            sfp.Property = "Name";
+            sfp.SimpleOperator = SimpleOperators.equals;
+            sfp.Value = new string[] { nameIn };
+
+            rr.ObjectType = "Role";
+            rr.Properties = new String[] { "ObjectID", "CustomerKey", "Name", "Description", "IsPrivate", "IsSystemDefined",
+                "Client.EnterpriseID", "Client.ID", "Client.CreatedBy", "CreatedDate", "Client.ModifiedBy", "ModifiedDate" };
+            rr.Filter = sfp;
+
+            status = soapClientIn.Retrieve(rr, out requestID, out results);
+
+            Console.WriteLine(status);
+            Console.WriteLine("Num Roles: " + results.Length);
+
+            foreach (Role role in results)
+            {
+                Console.WriteLine("Role: " + role.Name);                
+            }
+
+            Console.ReadLine();
+
+            return results;
+        }
+
+        public static void CreateRoleFromExistingInProd(SoapClient soapClientIn, Role roleIn)
+        {
+            Console.WriteLine("Entering CreateRoleFromExistingInProd()...");
+            String requestID;
+            String status;
+
+            Role role = new Role();
+            role.Name = roleIn.Name;
+            role.Description = roleIn.Description;
+            role.IsPrivate = roleIn.IsPrivate;
+            role.IsPrivateSpecified = roleIn.IsPrivateSpecified;
+            role.IsSystemDefined = roleIn.IsSystemDefined;
+            role.IsSystemDefinedSpecified = roleIn.IsSystemDefinedSpecified;
+
+            CreateResult[] cresults = soapClientIn.Create(new CreateOptions(), new APIObject[] { role }, out requestID, out status);
+
+            foreach (CreateResult result in cresults)
+            {
+                Console.WriteLine(result.StatusMessage);
+            }
+
+            Console.WriteLine(requestID + ": " + status);
+            Console.WriteLine("Role: " + role.Name);
+            Console.WriteLine("Exiting CreateRoleFromExistingInProd()...\n");
         }
     }
 }
