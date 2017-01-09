@@ -73,9 +73,7 @@ namespace ExportImport
 
             Console.WriteLine(status);
 
-            // Sort the list by Ordinal
-            //defListSorted = defList.OrderBy(o => o.Ordinal).ToList();
-
+            // Order the list by Ordinal
             defArray = defList.ToArray<DataExtensionField>().OrderBy(o => o.Ordinal).ToArray();
 
             Console.WriteLine("Num DE fields for " + deIn.Name + ": " + defArray.Length + "\n");
