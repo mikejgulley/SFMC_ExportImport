@@ -41,7 +41,7 @@ namespace ExportImport
             String requestID;
             String status;
             APIObject[] results;
-            List<DataExtensionField> defList = new List<DataExtensionField>(); ;
+            List<DataExtensionField> defList = new List<DataExtensionField>();
             DataExtensionField[] defArray = {};
 
             SimpleFilterPart sfp = new SimpleFilterPart();
@@ -72,7 +72,12 @@ namespace ExportImport
             }
 
             Console.WriteLine(status);
-            defArray = defList.ToArray<DataExtensionField>();
+
+            // Sort the list by Ordinal
+            //defListSorted = defList.OrderBy(o => o.Ordinal).ToList();
+
+            defArray = defList.ToArray<DataExtensionField>().OrderBy(o => o.Ordinal).ToArray();
+
             Console.WriteLine("Num DE fields for " + deIn.Name + ": " + defArray.Length + "\n");
 
             return defArray;

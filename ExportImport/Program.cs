@@ -18,7 +18,7 @@ namespace ExportImport
             // Connector - Tested = 83211; Enrolled Welcome = 83214; Handraiser = 83215; Inquiry Connector and NonConnector = 83216; Online Registration Abandon = 83217;
             // Candidate ID Generation = 9593; Email Consents = 84057; Explicit = 82031; Implicit = 82032; Emma Manual Unsubscribe = 88858; Adding and Updating = 9609; Comparing = 9610;
             // File Generation = 11059; Results = 11060; Flat Data = 82928; Backfeed = 59036; User Associations = 83142; Activity Report = 83791; Tracking Imports = 88801;
-            // My Templates = 807;
+            // My Templates = 807; Logs = 9559;
 
             // Data Folder ID's - SBX
             // Data View = 102133; Data Feeds = 102118; DE folder = 99425; Exclusion = 102135; Journey Builder = 102140; Processing = 102134; CASL = 102196; 
@@ -27,7 +27,9 @@ namespace ExportImport
             // Connector - September Prep = ; Connector - Tested = 102162; Enrolled Welcome = 102163; Handraiser = 102164; Inquiry Connector and NonConnector = 102165;
             // Online Registration Abandon = 102166; Candidate ID Generation = 102194; Email Consents = 102206; Explicit = 102204; Implicit = 102205; Emma Manual Unsubscribe = 102198;
             // Adding and Updating = 102207; Comparing = 102208; File Generation = 102209; Results = 102210; Flat Data = 102256; Backfeed = 102257; User Associations = 102258;
-            // Activity Report = 102259; Tracking Imports = 102260; My Templates = 99398;
+            // Activity Report = 102259; Tracking Imports = 102260; My Templates = 99398; Logs = 102319;
+            int prodCatNum = 11060;
+            int sbxCatNum = 102210;
 
             APIObject[] dataFolders = { };
             List<APIObject> dataFoldersByParent = new List<APIObject>();
@@ -52,7 +54,7 @@ namespace ExportImport
 
                 //----------------------------------------------------------------------------------
                 // Data Folders
-                //DataFolderUtil.GetDataFolderByName(soapProd, "My Templates");
+                //DataFolderUtil.GetDataFolderByName(soapProd, "Logs");
 
                 //dataFolders = DataFolderUtil.GetAllDataFolders(soapProd);
 
@@ -80,17 +82,17 @@ namespace ExportImport
 
                 //---------------------------------------------------------------------------------
                 // Data Extensions
-                //DataFolderUtil.GetDataFolderByName(soapProd, "Exclusion");
-                //dataExts = DataExtensionUtil.GetAllDataExtensionsByCategoryID(soapProd, 88801);
-                //Console.WriteLine("Num DE's: " + dataExts.Length);
+                //DataFolderUtil.GetDataFolderByName(soapProd, "Data Feeds");
+                dataExts = DataExtensionUtil.GetAllDataExtensionsByCategoryID(soapProd, prodCatNum);
+                Console.WriteLine("Num DE's: " + dataExts.Length);
 
-                //foreach (DataExtension de in dataExts)
-                //{
-                //    de.Fields = (DataExtensionField[])DataExtensionFieldsUtil.GetDataExtensionFieldsByDECustomerKey(soapProd, de);
-                //}
+                foreach (DataExtension de in dataExts)
+                {
+                    de.Fields = (DataExtensionField[])DataExtensionFieldsUtil.GetDataExtensionFieldsByDECustomerKey(soapProd, de);
+                }
 
-                //Console.WriteLine("...");
-                //Console.ReadLine();
+                Console.WriteLine("...");
+                Console.ReadLine();
 
                 //---------------------------------------------------------------------------------
                 // Profile Attributes
@@ -107,15 +109,15 @@ namespace ExportImport
 
                 // Templates
                 //templates = TemplateUtil.GetAllTemplates(soapProd);
-                templates = TemplateUtil.GetTemplateByCategoryId(soapProd, 807);
+                //templates = TemplateUtil.GetTemplateByCategoryId(soapProd, 807);
 
-                foreach (Template template in templates)
-                {
-                    Console.WriteLine("Template: " + template.TemplateName);
-                    //JSONUtil.saveTemplateToJSON(template);
-                }
+                //foreach (Template template in templates)
+                //{
+                //    Console.WriteLine("Template: " + template.TemplateName);
+                //    //JSONUtil.saveTemplateToJSON(template);
+                //}
 
-                Console.ReadLine();
+                //Console.ReadLine();
             }
 
             using (SoapClient soapSbx = ExactTargetServices.ExactTargetBinding(ConfigSettings.ETUsernameSbx, ConfigSettings.ETPasswordSbx))
@@ -168,16 +170,16 @@ namespace ExportImport
 
                 //--------------------------------------------------------------------------------------------
                 // Creating Data Extensions in Data Feeds folder based on DE's in Prod
-                //DataFolderUtil.GetDataFolderByName(soapSbx, "My Templates");
+                //DataFolderUtil.GetDataFolderByName(soapSbx, "Logs");
                 //DataExtensionUtil.CreateDataExtensionsByParentFolderID(soapSbx, dataExts, 8455);
                 //DataExtensionUtil.GetDataExtensionByName(soapSbx, "RPAreaOfInterest");
 
-                //Console.WriteLine("Creating Data Extensions...");
-                //Console.ReadLine();
-                //foreach (DataExtension de in dataExts)
-                //{
-                //    DataExtensionUtil.CreateDataExtensionFromExistingInProd(soapSbx, de, 102260);
-                //}
+                Console.WriteLine("Creating Data Extensions...");
+                Console.ReadLine();
+                foreach (DataExtension de in dataExts)
+                {
+                    DataExtensionUtil.CreateDataExtensionFromExistingInProd(soapSbx, de, sbxCatNum);
+                }
 
                 //---------------------------------------------------------------------------------
                 // Create Role
@@ -186,11 +188,12 @@ namespace ExportImport
                 //    RoleUtil.CreateRoleFromExistingInProd(soapSbx, role);    
                 //}
 
+                //---------------------------------------------------------------------------------
                 // Templates
-                foreach (Template temp in templates)
-                {
-                    TemplateUtil.CreateTemplateFromExisting(soapSbx, temp, 99398);
-                }
+                //foreach (Template temp in templates)
+                //{
+                //    TemplateUtil.CreateTemplateFromExisting(soapSbx, temp, 99398);
+                //}
                 
             }
             
