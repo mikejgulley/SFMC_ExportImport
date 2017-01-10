@@ -38,6 +38,7 @@ namespace ExportImport
             String requestID;
             String status;
             APIObject[] results;
+            List<APIObject> filteredResults = new List<APIObject>();
 
             RetrieveRequest rr = new RetrieveRequest();
 
@@ -55,16 +56,105 @@ namespace ExportImport
                 "MaxFileAgeScheduleOffset", "MaxImportFrequency", "DestinationObject.ID", "DestinationObject.ObjectID",
                 "Notification.ResponseType", "Notification.ResponseAddress", "RetrieveFileTransferLocation.ObjectID", 
                 "Delimiter", "HeaderLines", "EndOfLineRepresentation", "NullRepresentation", "StandardQuotedStrings",
-                "DateFormattingLocale.LocaleCode"}; // Client.ClientID1 lets associate with BU
+                "DateFormattingLocale.LocaleCode" }; // Client.ClientID1 lets associate with BU
 
             status = soapClientIn.Retrieve(rr, out requestID, out results);
 
             Console.WriteLine(status);
             Console.WriteLine("Num Import Definitions: " + results.Length);
 
+            foreach (ImportDefinition iDef in results)
+            {
+                Guid guidOutput;
+                bool isGuid = Guid.TryParse(iDef.Name, out guidOutput);
+                if (!isGuid)
+                {
+                    filteredResults.Add(iDef);
+                }
+            }
+
+            results = filteredResults.ToArray();
+
+            Console.WriteLine("Num Filtered Import Definitions: " + results.Length);
+
             Console.ReadLine();
 
             return results;
+        }
+
+        // This will never work since we cannot retrieve Field Maps from the Import Definition object. API limitation.
+        public static void CreateImportDefFromExisting(SoapClient soapClientIn, ImportDefinition iDefIn)
+        {
+            Console.WriteLine("Entering CreateImportDefinitionFromExisting()...\n");
+
+            String requestID;
+            String status;
+
+            ImportDefinition id = new ImportDefinition();
+            id.Name = iDefIn.Name;
+            id.CustomerKey = iDefIn.CustomerKey;
+            //Optional
+            id.AllowErrors = iDefIn.AllowErrors;
+            id.AllowErrorsSpecified = iDefIn.AllowErrorsSpecified;
+
+            //Associate Data-Extenison to Import-Defintion   
+            //DataExtension de = new DataExtension();
+            //de.CustomerKey = "810f461c-231a-440a-8543-837460be6c7a";//required //The External Key of the Data Extension to import into
+            //de = (DataExtension) iDefIn.DestinationObject;
+            id.DestinationObject = iDefIn.DestinationObject;
+            id.DestinationObject.ID = iDefIn.DestinationObject.ID;
+            id.DestinationObject.IDSpecified = iDefIn.DestinationObject.IDSpecified;
+
+            //Specify the notification type //optional
+            id.Notification = new AsyncResponse();
+            id.Notification = iDefIn.Notification;
+            id.Notification.ResponseType = iDefIn.Notification.ResponseType;
+            id.Notification.ResponseAddress = iDefIn.Notification.ResponseAddress;
+
+            //Specify the File Transfer Location
+            id.RetrieveFileTransferLocation = new FileTransferLocation();
+            id.RetrieveFileTransferLocation = iDefIn.RetrieveFileTransferLocation;
+            id.RetrieveFileTransferLocation.CustomerKey = iDefIn.RetrieveFileTransferLocation.CustomerKey;//required
+
+            //Optional
+            id.UpdateType = iDefIn.UpdateType;
+            id.UpdateTypeSpecified = iDefIn.UpdateTypeSpecified;
+
+            //Map fields
+            id.FieldMappingType = iDefIn.FieldMappingType;//required
+            id.FieldMappingTypeSpecified = iDefIn.FieldMappingTypeSpecified;
+            FieldMap[] fMap = { };
+            id.FieldMaps = fMap;
+
+            if (iDefIn.FieldMaps != null)
+            {
+                id.FieldMaps = iDefIn.FieldMaps;
+
+                for (int i = 0; i < iDefIn.FieldMaps.Length; i++)
+                {
+                    id.FieldMaps[i] = new FieldMap();
+                    id.FieldMaps[i].DestinationName = iDefIn.FieldMaps[i].DestinationName;
+                    id.FieldMaps[i].Item = iDefIn.FieldMaps[i].Item;
+                }
+            }
+
+            //Specify the File naming Specifications
+            id.FileSpec = iDefIn.FileSpec;
+
+            //Specify the FileType
+            id.FileType = iDefIn.FileType;//required
+            id.FileTypeSpecified = iDefIn.FileTypeSpecified;
+
+            CreateResult[] cResults = soapClientIn.Create(new CreateOptions(), new APIObject[] { id }, out requestID, out status);
+
+            foreach (CreateResult result in cResults)
+            {
+                Console.WriteLine(result.StatusMessage);
+            }
+
+            Console.WriteLine(requestID + ": " + status);
+            Console.WriteLine("Import Definition: " + id.Name);
+            Console.WriteLine("Exiting CreateImportDefinitionFromExisting()...\n");
         }
     }
 }

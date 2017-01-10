@@ -36,7 +36,7 @@ namespace ExportImport
             //ReplyMailUtil.DescribeRMMConfiguration(soapClientIn);
             //BrandUtil.DescribeBrand(soapClientIn);
             //AutomationUtil.DescribeAutomation(soapClientIn);
-            AutomationTaskUtil.DescribeAutomationTask(soapClientIn);
+            //AutomationTaskUtil.DescribeAutomationTask(soapClientIn);
         }
     }
 }

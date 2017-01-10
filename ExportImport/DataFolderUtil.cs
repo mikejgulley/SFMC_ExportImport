@@ -112,9 +112,12 @@ namespace ExportImport
 
             foreach (DataFolder df in results)
             {
-                Console.WriteLine("Data Folder Name: " + df.Name);
-                Console.WriteLine("Data Folder ID: " + df.ID);
-                Console.WriteLine("Data Folder Parent Folder ID: " + df.ParentFolder.ID + "\n");
+                //if (df.ParentFolder.ID == 10874)
+                //{
+                    Console.WriteLine("Data Folder Name: " + df.Name);
+                    Console.WriteLine("Data Folder ID: " + df.ID);
+                    Console.WriteLine("Data Folder Parent Folder ID: " + df.ParentFolder.ID + "\n");
+                //}
             }
             
 
