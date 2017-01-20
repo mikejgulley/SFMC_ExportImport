@@ -13,8 +13,8 @@ namespace ExportImport
         {
             // Data Folder ID's - PROD
             // Data Feeds = 8455; Data Views = 82914; Exclusion = 9218; Journey Builder = 82920; Processing = 9201; CASL = 10610; Nightly Candidate RP Process = 9595; 
-            // VOC = 11058; Appointment Confirmation = 83625; Appointment Reminder = 83632; Appointment Survey Resend = 86029; Connector - Booked = 83432; Connector - December = ;
-            // Connector - January = 101939; Connector - November = ; Connector - October = ; Connector - September EDGE = ; Connector - September Prep = ;
+            // VOC = 11058; Appointment Confirmation = 83625; Appointment Reminder = 83632; Appointment Survey Resend = 86029; Connector - Booked = 83432; Connector - December = 99370;
+            // Connector - January = 101939; Connector - November = 95759; Connector - October = 93046; Connector - September EDGE = 83218; Connector - September Prep = 83457;
             // Connector - Tested = 83211; Enrolled Welcome = 83214; Handraiser = 83215; Inquiry Connector and NonConnector = 83216; Online Registration Abandon = 83217;
             // Candidate ID Generation = 9593; Email Consents = 84057; Explicit = 82031; Implicit = 82032; Emma Manual Unsubscribe = 88858; Adding and Updating = 9609; Comparing = 9610;
             // File Generation = 11059; Results = 11060; Flat Data = 82928; Backfeed = 59036; User Associations = 83142; Activity Report = 83791; Tracking Imports = 88801;
@@ -25,16 +25,16 @@ namespace ExportImport
             // Data Folder ID's - SBX
             // Data View = 102133; Data Feeds = 102118; DE folder = 99425; Exclusion = 102135; Journey Builder = 102140; Processing = 102134; CASL = 102196; 
             // Nightly Candidate RP Process = 102195; VOC = 102197; Appointment Confirmation = 102170; Appointment Reminder = 102171; Appointment Survey Resend = 102172; 
-            // Connector - Booked = 102168; Connector - December = ; Connector - January = 102176; Connector - November = ; Connector - October = ; Connector - September EDGE = ;
-            // Connector - September Prep = ; Connector - Tested = 102162; Enrolled Welcome = 102163; Handraiser = 102164; Inquiry Connector and NonConnector = 102165;
+            // Connector - Booked = 102168; Connector - December = 102175; Connector - January = 102176; Connector - November = 102174; Connector - October = 102173; Connector - September EDGE = 102167;
+            // Connector - September Prep = 102169; Connector - Tested = 102162; Enrolled Welcome = 102163; Handraiser = 102164; Inquiry Connector and NonConnector = 102165;
             // Online Registration Abandon = 102166; Candidate ID Generation = 102194; Email Consents = 102206; Explicit = 102204; Implicit = 102205; Emma Manual Unsubscribe = 102198;
             // Adding and Updating = 102207; Comparing = 102208; File Generation = 102209; Results = 102210; Flat Data = 102256; Backfeed = 102257; User Associations = 102258;
             // Activity Report = 102259; Tracking Imports = 102260; My Templates = 99398; Logs = 102319; Portfolio = 99405; Activity Report Portfolio = 102240;
             // Build Your Own Portfolio = 102241; EDGE = 102242; Header Images = 102243; Prep = 102244; Promotional Graphics = 102245; Demo = 102246;
             // Letter Assets = 102247; Letter Template = 102248; Moved from Shared = 102249; Newsletter Assets = 102250; Subscription Center = 102251; Supporting = 102252;
 
-            int prodCatNum = 11060;
-            int sbxCatNum = 102210;
+            int prodCatNum = 83457;
+            int sbxCatNum = 102169;
             int prodPortCatNum = 9205;
             int sbxPortCatNum = 102252;
 
@@ -91,14 +91,14 @@ namespace ExportImport
 
                 //---------------------------------------------------------------------------------
                 // Data Extensions
-                //DataFolderUtil.GetDataFolderByName(soapProd, "Supporting");
-                //dataExts = DataExtensionUtil.GetAllDataExtensionsByCategoryID(soapProd, prodCatNum);
-                //Console.WriteLine("Num DE's: " + dataExts.Length);
+                //DataFolderUtil.GetDataFolderByName(soapProd, "Connector - September Prep");
+                dataExts = DataExtensionUtil.GetAllDataExtensionsByCategoryID(soapProd, prodCatNum);
+                Console.WriteLine("Num DE's: " + dataExts.Length);
 
-                //foreach (DataExtension de in dataExts)
-                //{
-                //    de.Fields = (DataExtensionField[])DataExtensionFieldsUtil.GetDataExtensionFieldsByDECustomerKey(soapProd, de);
-                //}
+                foreach (DataExtension de in dataExts)
+                {
+                    de.Fields = (DataExtensionField[])DataExtensionFieldsUtil.GetDataExtensionFieldsByDECustomerKey(soapProd, de);
+                }
 
                 //Console.WriteLine("...");
                 //Console.ReadLine();
@@ -188,16 +188,15 @@ namespace ExportImport
 
                 //--------------------------------------------------------------------------------------------
                 // Creating Data Extensions in Data Feeds folder based on DE's in Prod
-                //DataFolderUtil.GetDataFolderByName(soapSbx, "Supporting");
-                //DataExtensionUtil.CreateDataExtensionsByParentFolderID(soapSbx, dataExts, 8455);
-                //DataExtensionUtil.GetDataExtensionByName(soapSbx, "RPAreaOfInterest");
+                //DataFolderUtil.GetDataFolderByName(soapSbx, "Connector - September Prep");
 
-                //Console.WriteLine("Creating Data Extensions...");
+                Console.WriteLine("Creating Data Extensions...");
                 //Console.ReadLine();
-                //foreach (DataExtension de in dataExts)
-                //{
-                //    DataExtensionUtil.CreateDataExtensionFromExistingInProd(soapSbx, de, sbxCatNum);
-                //}
+                foreach (DataExtension de in dataExts)
+                {
+                    DataExtensionUtil.CreateDataExtensionFromExistingInProd(soapSbx, de, sbxCatNum);
+                }
+                Console.ReadLine();
 
                 //---------------------------------------------------------------------------------
                 // Create Role
@@ -222,17 +221,17 @@ namespace ExportImport
 
                 //---------------------------------------------------------------------------------
                 // Import Definitions
-                int counter = 0;
+                //int counter = 0;
 
-                foreach (ImportDefinition iDef in importDefs)
-                {
-                    while (counter < 1)
-                    {
-                        ImportDefinitionUtil.CreateImportDefFromExisting(soapSbx, iDef);
-                        counter++;   
-                    }
-                    break;
-                }
+                //foreach (ImportDefinition iDef in importDefs)
+                //{
+                //    while (counter < 1)
+                //    {
+                //        ImportDefinitionUtil.CreateImportDefFromExisting(soapSbx, iDef);
+                //        counter++;   
+                //    }
+                //    break;
+                //}
             }
             
         }
