@@ -12,7 +12,7 @@ namespace ExportImport
         static void Main(string[] args)
         {
             // Data Folder ID's - PROD
-            // Data Feeds = 8455; Data Views = 82914; Exclusion = 9218; Journey Builder = 82920; Processing = 9201; CASL = 10610; Nightly Candidate RP Process = 9595; 
+            // Data Views = 82914; Data Feeds = 8455; DE folder = 830; Exclusion = 9218; Journey Builder = 82920; Processing = 9201; CASL = 10610; Nightly Candidate RP Process = 9595; 
             // VOC = 11058; Appointment Confirmation = 83625; Appointment Reminder = 83632; Appointment Survey Resend = 86029; Connector - Booked = 83432; Connector - December = 99370;
             // Connector - January = 101939; Connector - November = 95759; Connector - October = 93046; Connector - September EDGE = 83218; Connector - September Prep = 83457;
             // Connector - Tested = 83211; Enrolled Welcome = 83214; Handraiser = 83215; Inquiry Connector and NonConnector = 83216; Online Registration Abandon = 83217;
@@ -20,10 +20,12 @@ namespace ExportImport
             // File Generation = 11059; Results = 11060; Flat Data = 82928; Backfeed = 59036; User Associations = 83142; Activity Report = 83791; Tracking Imports = 88801;
             // My Templates = 807; Logs = 9559; Portfolio = 814; Activity Report Portfolio = 83756;
             // Build Your Own Portfolio = 10874; EDGE = 84124; Header Images = 10877; Prep = 85681; Promotional Graphics = 10876; Demo = 6291;
-            // Letter Assets = 8230; Letter Template = 8229; Moved from Shared = 98804; Newsletter Assets = 8231; Subscription Center = 83023; Supporting = 9205;
+            // Letter Assets = 8230; Letter Template = 8229; Moved from Shared = 98804; Newsletter Assets = 8231; Subscription Center = 83023; Supporting = 9205; Connector = 12464
+            // Campaign Archive (Parent = Connector) = 102948; Internal = 95621; Staging = 83291; Campaign Archive (Parent = Staging) = 103248; Segments = 8537; Triggered Emails = 8885;
+            // User Initiated Send = 88894; Sylvan Source = 88895; Shared Data Extensions = 831;
 
             // Data Folder ID's - SBX
-            // Data View = 102133; Data Feeds = 102118; DE folder = 99425; Exclusion = 102135; Journey Builder = 102140; Processing = 102134; CASL = 102196; 
+            // Data Views = 102133; Data Feeds = 102118; DE folder = 99425; Exclusion = 102135; Journey Builder = 102140; Processing = 102134; CASL = 102196; 
             // Nightly Candidate RP Process = 102195; VOC = 102197; Appointment Confirmation = 102170; Appointment Reminder = 102171; Appointment Survey Resend = 102172; 
             // Connector - Booked = 102168; Connector - December = 102175; Connector - January = 102176; Connector - November = 102174; Connector - October = 102173; Connector - September EDGE = 102167;
             // Connector - September Prep = 102169; Connector - Tested = 102162; Enrolled Welcome = 102163; Handraiser = 102164; Inquiry Connector and NonConnector = 102165;
@@ -31,10 +33,12 @@ namespace ExportImport
             // Adding and Updating = 102207; Comparing = 102208; File Generation = 102209; Results = 102210; Flat Data = 102256; Backfeed = 102257; User Associations = 102258;
             // Activity Report = 102259; Tracking Imports = 102260; My Templates = 99398; Logs = 102319; Portfolio = 99405; Activity Report Portfolio = 102240;
             // Build Your Own Portfolio = 102241; EDGE = 102242; Header Images = 102243; Prep = 102244; Promotional Graphics = 102245; Demo = 102246;
-            // Letter Assets = 102247; Letter Template = 102248; Moved from Shared = 102249; Newsletter Assets = 102250; Subscription Center = 102251; Supporting = 102252;
+            // Letter Assets = 102247; Letter Template = 102248; Moved from Shared = 102249; Newsletter Assets = 102250; Subscription Center = 102251; Supporting = 102252; Connector = 103723
+            // Campaign Archive (Parent = Connector) = 103724; Internal = 103725; Staging = 103726; Campaign Archive (Parent = Staging) = 103727; Segments = 103747; Triggered Emails = 103748;
+            // User Initiated Send = 103749; Sylvan Source = 103750; Shared Data Extensions = 99426; 
 
-            int prodCatNum = 83457;
-            int sbxCatNum = 102169;
+            int prodCatNum = 831;
+            int sbxCatNum = 99426;
             int prodPortCatNum = 9205;
             int sbxPortCatNum = 102252;
 
@@ -63,7 +67,7 @@ namespace ExportImport
 
                 //----------------------------------------------------------------------------------
                 // Data Folders
-                //DataFolderUtil.GetDataFolderByName(soapProd, "Build Your Own");
+                //DataFolderUtil.GetDataFolderByName(soapProd, "Segments");
 
                 //dataFolders = DataFolderUtil.GetAllDataFolders(soapProd);
 
@@ -91,14 +95,14 @@ namespace ExportImport
 
                 //---------------------------------------------------------------------------------
                 // Data Extensions
-                //DataFolderUtil.GetDataFolderByName(soapProd, "Connector - September Prep");
-                dataExts = DataExtensionUtil.GetAllDataExtensionsByCategoryID(soapProd, prodCatNum);
-                Console.WriteLine("Num DE's: " + dataExts.Length);
+                //DataFolderUtil.GetDataFolderByName(soapProd, "Shared Data Extensions");
+                //dataExts = DataExtensionUtil.GetAllDataExtensionsByCategoryID(soapProd, prodCatNum);
+                //Console.WriteLine("Num DE's: " + dataExts.Length);
 
-                foreach (DataExtension de in dataExts)
-                {
-                    de.Fields = (DataExtensionField[])DataExtensionFieldsUtil.GetDataExtensionFieldsByDECustomerKey(soapProd, de);
-                }
+                //foreach (DataExtension de in dataExts)
+                //{
+                //    de.Fields = (DataExtensionField[])DataExtensionFieldsUtil.GetDataExtensionFieldsByDECustomerKey(soapProd, de);
+                //}
 
                 //Console.WriteLine("...");
                 //Console.ReadLine();
@@ -135,7 +139,7 @@ namespace ExportImport
 
                 //---------------------------------------------------------------------------------
                 // Import Defs
-                //importDefs = ImportDefinitionUtil.GetAllImportDefinitions(soapProd);
+                importDefs = ImportDefinitionUtil.GetAllImportDefinitions(soapProd);
             }
 
             using (SoapClient soapSbx = ExactTargetServices.ExactTargetBinding(ConfigSettings.ETUsernameSbx, ConfigSettings.ETPasswordSbx))
@@ -178,7 +182,7 @@ namespace ExportImport
 
                 //--------------------------------------------------------------------------------------------
                 // Data Folders -- Create folders by Parent Folder ID
-                //DataFolderUtil.GetDataFolderByName(soapSbx, "Activity Report");
+                //DataFolderUtil.GetDataFolderByName(soapSbx, "Staging");
                 //foreach (DataFolder df in dataFoldersByParentArray)
                 //{
                 //    Console.WriteLine("Creating Data Folder: " + df.Name);
@@ -188,15 +192,14 @@ namespace ExportImport
 
                 //--------------------------------------------------------------------------------------------
                 // Creating Data Extensions in Data Feeds folder based on DE's in Prod
-                //DataFolderUtil.GetDataFolderByName(soapSbx, "Connector - September Prep");
+                //DataFolderUtil.GetDataFolderByName(soapSbx, "Shared Data Extensions");
 
-                Console.WriteLine("Creating Data Extensions...");
+                //Console.WriteLine("Creating Data Extensions...");
+                //foreach (DataExtension de in dataExts)
+                //{
+                //    DataExtensionUtil.CreateDataExtensionFromExistingInProd(soapSbx, de, sbxCatNum);
+                //}
                 //Console.ReadLine();
-                foreach (DataExtension de in dataExts)
-                {
-                    DataExtensionUtil.CreateDataExtensionFromExistingInProd(soapSbx, de, sbxCatNum);
-                }
-                Console.ReadLine();
 
                 //---------------------------------------------------------------------------------
                 // Create Role
@@ -232,6 +235,11 @@ namespace ExportImport
                 //    }
                 //    break;
                 //}
+
+                foreach (ImportDefinition iDef in importDefs)
+                {
+                    ImportDefinitionUtil.CreateImportDefFromExisting(soapSbx, iDef);
+                }
             }
             
         }

@@ -56,7 +56,7 @@ namespace ExportImport
                 "MaxFileAgeScheduleOffset", "MaxImportFrequency", "DestinationObject.ID", "DestinationObject.ObjectID",
                 "Notification.ResponseType", "Notification.ResponseAddress", "RetrieveFileTransferLocation.ObjectID", 
                 "Delimiter", "HeaderLines", "EndOfLineRepresentation", "NullRepresentation", "StandardQuotedStrings",
-                "DateFormattingLocale.LocaleCode" }; // Client.ClientID1 lets associate with BU
+                "DateFormattingLocale.LocaleCode" }; // Client.ClientID1 lets associate with BU // "FieldMap"/"Field Maps" not retrievable -> throws error
 
             status = soapClientIn.Retrieve(rr, out requestID, out results);
 
@@ -97,7 +97,7 @@ namespace ExportImport
             id.AllowErrors = iDefIn.AllowErrors;
             id.AllowErrorsSpecified = iDefIn.AllowErrorsSpecified;
 
-            //Associate Data-Extenison to Import-Defintion   
+            //Associate Data-Extension to Import-Defintion   
             //DataExtension de = new DataExtension();
             //de.CustomerKey = "810f461c-231a-440a-8543-837460be6c7a";//required //The External Key of the Data Extension to import into
             //de = (DataExtension) iDefIn.DestinationObject;
@@ -136,6 +136,8 @@ namespace ExportImport
                     id.FieldMaps[i].DestinationName = iDefIn.FieldMaps[i].DestinationName;
                     id.FieldMaps[i].Item = iDefIn.FieldMaps[i].Item;
                 }
+            } else {
+                id.FieldMaps = null;
             }
 
             //Specify the File naming Specifications
