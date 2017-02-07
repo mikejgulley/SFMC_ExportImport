@@ -24,6 +24,16 @@ namespace ExportImport
             // Campaign Archive (Parent = Connector) = 102948; Internal = 95621; Staging = 83291; Campaign Archive (Parent = Staging) = 103248; Segments = 8537; Triggered Emails = 8885;
             // User Initiated Send = 88894; Sylvan Source = 88895; Shared Data Extensions = 831;
 
+            // Query = 833; Activity Report = 83902; Temp = 93590; Tracking Imports = 88862; Backfeed = 83572; Data Feeds = 9202; Data Views = 82915; Exclusion = 9588; Flat Data = 82929;
+            // Journey Builder = 82919; 
+            // Appointment Confirmation = 83624; Appointment Reminder = 83633; Appointment Survey Resend = 86030; Connector - Booked = 83431; Connector - December = 99372;
+            // Connector - February = 103128; Connector - January = 101940; Connector - November = 95760; Connector - October = 93048; Connector - Sept - EDGE = 83438;
+            // Connector - Sept - Prep = 83456; Connector - Tested = 83212; Enrollment - Welcome = 83223; Handraiser = 83440; Inquiry = 83450; Online Abandon = 83527; QA = 84582;
+            // Processing = 9596; Candidate ID Generation = 9597; CASL = 10612; Email Consents = 84056; Explicit = 82809; Implicit = 82908; Emma Opt Out = 88861;
+            // Nightly Candidate RP Process = 9598; Adding and Updating = 9605; Comparing = 9606; VOC = 83384; File Generation = 83385; Results = 83386; Triggered Send Reporting = 97686;
+            // User Initiated Send = 88897; Sylvan Source = 88898;
+
+            //-----------------------------------------------------------------------
             // Data Folder ID's - SBX
             // Data Views = 102133; Data Feeds = 102118; DE folder = 99425; Exclusion = 102135; Journey Builder = 102140; Processing = 102134; CASL = 102196; 
             // Nightly Candidate RP Process = 102195; VOC = 102197; Appointment Confirmation = 102170; Appointment Reminder = 102171; Appointment Survey Resend = 102172; 
@@ -35,7 +45,16 @@ namespace ExportImport
             // Build Your Own Portfolio = 102241; EDGE = 102242; Header Images = 102243; Prep = 102244; Promotional Graphics = 102245; Demo = 102246;
             // Letter Assets = 102247; Letter Template = 102248; Moved from Shared = 102249; Newsletter Assets = 102250; Subscription Center = 102251; Supporting = 102252; Connector = 103723
             // Campaign Archive (Parent = Connector) = 103724; Internal = 103725; Staging = 103726; Campaign Archive (Parent = Staging) = 103727; Segments = 103747; Triggered Emails = 103748;
-            // User Initiated Send = 103749; Sylvan Source = 103750; Shared Data Extensions = 99426; 
+            // User Initiated Send = 103749; Sylvan Source = 103750; Shared Data Extensions = 99426;
+
+            // Query = 99428; Activity Report = 103810; Temp = 103811; Tracking Imports = 103812; Backfeed = 103813; Data Feeds = 103814; Data Views = 103815; Exclusion = 103816; Flat Data = 103817;
+            // Journey Builder = 103818; 
+            // Appointment Confirmation = 103837; Appointment Reminder = 103853; Appointment Survey Resend = 103854; Connector - Booked = 103855; Connector - December = 103856;
+            // Connector - February = 103857; Connector - January = 103858; Connector - November = 103859; Connector - October = 103860; Connector - Sept - EDGE = 103861; 
+            // Connector - Sept - Prep = 103862; Connector - Tested = 103863; Enrollment - Welcome = 103864; Handraiser = 103865; Inquiry = 103866; Online Abandon = 103867; QA = 103868;
+            // Processing = 103819; Candidate ID Generation = 103824; CASL = 103825; Email Consents = 103829; Explicit = 103830; Implicit = 103831; Emma Opt Out = 103826;
+            // Nightly Candidate RP Process = 103827; Adding and Updating = 103832; Comparing = 103833; VOC = 103828; File Generation = 103834; Results = 103836; Triggered Send Reporting = 103821;
+            // User Initiated Send = 103822; Sylvan Source = 103823;
 
             int prodCatNum = 831;
             int sbxCatNum = 99426;
@@ -53,6 +72,7 @@ namespace ExportImport
             APIObject[] templates = { };
             APIObject[] portItems = { };
             APIObject[] importDefs = { };
+            APIObject[] queries = { };
 
             using (SoapClient soapProd = ExactTargetServices.ExactTargetBinding(ConfigSettings.ETUsername, ConfigSettings.ETPassword))
             {
@@ -95,7 +115,7 @@ namespace ExportImport
 
                 //---------------------------------------------------------------------------------
                 // Data Extensions
-                //DataFolderUtil.GetDataFolderByName(soapProd, "Shared Data Extensions");
+                //DataFolderUtil.GetDataFolderByName(soapProd, "Sylvan Source");
                 //dataExts = DataExtensionUtil.GetAllDataExtensionsByCategoryID(soapProd, prodCatNum);
                 //Console.WriteLine("Num DE's: " + dataExts.Length);
 
@@ -139,7 +159,11 @@ namespace ExportImport
 
                 //---------------------------------------------------------------------------------
                 // Import Defs
-                importDefs = ImportDefinitionUtil.GetAllImportDefinitions(soapProd);
+                //importDefs = ImportDefinitionUtil.GetAllImportDefinitions(soapProd);
+
+                //---------------------------------------------------------------------------------
+                // Query Definitions
+                queries = QueryDefinitionUtil.GetAllQueries(soapProd);
             }
 
             using (SoapClient soapSbx = ExactTargetServices.ExactTargetBinding(ConfigSettings.ETUsernameSbx, ConfigSettings.ETPasswordSbx))
@@ -192,7 +216,7 @@ namespace ExportImport
 
                 //--------------------------------------------------------------------------------------------
                 // Creating Data Extensions in Data Feeds folder based on DE's in Prod
-                //DataFolderUtil.GetDataFolderByName(soapSbx, "Shared Data Extensions");
+                //DataFolderUtil.GetDataFolderByName(soapSbx, "Sylvan Source");
 
                 //Console.WriteLine("Creating Data Extensions...");
                 //foreach (DataExtension de in dataExts)
@@ -236,10 +260,16 @@ namespace ExportImport
                 //    break;
                 //}
 
-                foreach (ImportDefinition iDef in importDefs)
-                {
-                    ImportDefinitionUtil.CreateImportDefFromExisting(soapSbx, iDef);
-                }
+                //foreach (ImportDefinition iDef in importDefs)
+                //{
+                //    ImportDefinitionUtil.CreateImportDefFromExisting(soapSbx, iDef);
+                //}
+
+                //---------------------------------------------------------------------------------
+                // Query Definitions
+                //QueryDefinitionUtil.CreateQuery(soapSbx);
+
+                QueryDefinitionUtil.CreateQueries(soapSbx, queries);
             }
             
         }
