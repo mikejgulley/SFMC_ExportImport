@@ -481,6 +481,8 @@ namespace ExportImport
             }
             //de.Status = deIn.Status; // "none" is an invalid status
             de.Template = deIn.Template;
+            //de.Template.ID = deIn.Template.ID;
+            //de.Template.IDSpecified = true;
 
             CreateResult[] cresults = soapClientIn.Create(new CreateOptions(), new APIObject[] { de }, out requestID, out status);
 

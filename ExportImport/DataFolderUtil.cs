@@ -140,6 +140,90 @@ namespace ExportImport
             return results;
         }
 
+        public static APIObject[] GetDataFolderByName(SoapClient soapClientIn, string dataFolderNameIn, int parentFolderIdIn)
+        {
+            String requestID;
+            String status;
+            APIObject[] results;
+            //APIObject result = new APIObject();
+
+            SimpleFilterPart sfp = new SimpleFilterPart();
+            sfp.Property = "Name";
+            sfp.SimpleOperator = SimpleOperators.equals;
+            sfp.Value = new String[] { dataFolderNameIn };
+
+            SimpleFilterPart sfp2 = new SimpleFilterPart();
+            sfp2.Property = "ParentFolder.ID";
+            sfp2.SimpleOperator = SimpleOperators.equals;
+            sfp2.Value = new String[] { parentFolderIdIn.ToString() };
+
+            ComplexFilterPart cfp = new ComplexFilterPart();
+            cfp.LeftOperand = sfp;
+            cfp.LogicalOperator = LogicalOperators.AND;
+            cfp.RightOperand = sfp2;
+
+            RetrieveRequest rr = new RetrieveRequest();
+
+            rr.ObjectType = "DataFolder";
+            rr.Properties = new String[] { "Name", "Description", "ContentType", "ID", "ObjectID", "CustomerKey", 
+                "ParentFolder.Name", "ParentFolder.Description", "ParentFolder.ContentType", "ParentFolder.ID", 
+                "ParentFolder.ObjectID", "ParentFolder.CustomerKey" };
+            rr.Filter = cfp;
+
+            status = soapClientIn.Retrieve(rr, out requestID, out results);
+
+            Console.WriteLine(status);
+            Console.WriteLine("Num Data Folders: " + results.Length);
+
+            foreach (DataFolder df in results)
+            {
+                Console.WriteLine("Data Folder Name: " + df.Name);
+                Console.WriteLine("Data Folder ID: " + df.ID);
+                Console.WriteLine("Data Folder Parent Folder ID: " + df.ParentFolder.ID + "\n");
+            }
+
+            Console.ReadLine();
+
+            return results;
+        }
+
+        public static APIObject[] GetAllDataFoldersByParentFolderID(SoapClient soapClientIn, int parentFolderIdIn)
+        {
+            String requestID;
+            String status;
+            APIObject[] results;
+
+            SimpleFilterPart sfp = new SimpleFilterPart();
+            sfp.Property = "ParentFolder.ID";
+            sfp.SimpleOperator = SimpleOperators.equals;
+            sfp.Value = new String[] { parentFolderIdIn.ToString() };
+
+            RetrieveRequest rr = new RetrieveRequest();
+
+            ClientID clientID = new ClientID();
+            clientID.ID = 7237980;
+            clientID.IDSpecified = true;
+            ClientID[] targetClientIDs = { clientID };
+            rr.ClientIDs = targetClientIDs;
+            rr.QueryAllAccounts = true;
+            rr.QueryAllAccountsSpecified = true;
+            rr.Filter = sfp;
+
+            rr.ObjectType = "DataFolder";
+            rr.Properties = new String[] { "Name", "Description", "ContentType", "ID", "ObjectID", "CustomerKey", 
+                "ParentFolder.Name", "ParentFolder.Description", "ParentFolder.ContentType", "ParentFolder.ID", 
+                "ParentFolder.ObjectID", "ParentFolder.CustomerKey" };
+
+            status = soapClientIn.Retrieve(rr, out requestID, out results);
+
+            Console.WriteLine(status);
+            Console.WriteLine("Num Data Folders with Parent My Contents (ID: " + parentFolderIdIn + ") = " + results.Length);
+
+            Console.ReadLine();
+
+            return results;
+        }
+
         public static APIObject[] GetAllDataFoldersByType(SoapClient soapClientIn, String typeIn)
         {
             String requestID;
@@ -229,7 +313,7 @@ namespace ExportImport
             Console.WriteLine(requestID + ": " + status);
         }
 
-        public static void CreateDataFolderFromExistingInProd(SoapClient soapClientIn, DataFolder dataFolderIn)
+        public static void CreateDataFolderFromExistingInProd(SoapClient soapClientIn, DataFolder dataFolderIn, int destFolderIdIn)
         {
             String requestID;
             String status;
@@ -242,7 +326,8 @@ namespace ExportImport
             datafolder.AllowChildren = true;
             datafolder.AllowChildrenSpecified = true;
             datafolder.ContentType = dataFolderIn.ContentType;
-            datafolder.ID = dataFolderIn.ID;
+            //datafolder.ID = dataFolderIn.ID;
+            //datafolder.IDSpecified = true;
             datafolder.IsActive = dataFolderIn.IsActive;
             datafolder.IsActiveSpecified = dataFolderIn.IsActiveSpecified;
             //datafolder.IsEditable = dataFolderIn.IsEditable;
@@ -250,7 +335,7 @@ namespace ExportImport
             datafolder.IsEditable = true;
             datafolder.IsEditableSpecified = true;
             datafolder.ParentFolder = dataFolderIn.ParentFolder;
-            datafolder.ParentFolder.ID = 99425;
+            datafolder.ParentFolder.ID = destFolderIdIn;
             datafolder.ParentFolder.IDSpecified = true;
 
             CreateResult[] cresults = soapClientIn.Create(new CreateOptions(), new APIObject[] { datafolder }, out requestID, out status);
