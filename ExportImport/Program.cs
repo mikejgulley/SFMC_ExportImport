@@ -18,7 +18,9 @@ namespace ExportImport
             // Connector - Tested = 83211; Enrolled Welcome = 83214; Handraiser = 83215; Inquiry Connector and NonConnector = 83216; Online Registration Abandon = 83217;
             // Candidate ID Generation = 9593; Email Consents = 84057; Explicit = 82031; Implicit = 82032; Emma Manual Unsubscribe = 88858; Adding and Updating = 9609; Comparing = 9610;
             // File Generation = 11059; Results = 11060; Flat Data = 82928; Backfeed = 59036; User Associations = 83142; Activity Report = 83791; Tracking Imports = 88801;
-            // My Templates = 807; Logs = 9559; Portfolio = 814; Activity Report Portfolio = 83756;
+            // My Templates = 807; Logs = 9559; 
+            
+            // Portfolio = 814; Activity Report Portfolio = 83756;
             // Build Your Own Portfolio = 10874; EDGE = 84124; Header Images = 10877; Prep = 85681; Promotional Graphics = 10876; Demo = 6291;
             // Letter Assets = 8230; Letter Template = 8229; Moved from Shared = 98804; Newsletter Assets = 8231; Subscription Center = 83023; Supporting = 9205; Connector = 12464
             // Campaign Archive (Parent = Connector) = 102948; Internal = 95621; Staging = 83291; Campaign Archive (Parent = Staging) = 103248; Segments = 8537; Triggered Emails = 8885;
@@ -41,6 +43,9 @@ namespace ExportImport
             // Shared Items = 817; Shared Contents = 821; Archive = 99646; Body-Blank Layouts = 88038;
             // Body-Text = 89100; Announcements = 89103; EDGE = 89105; Partnerships&Outreach = 89107; Prep = 89106; Tutoring = 89104;
             // Header Images = 89101; Announcements = 89108; EDGE = 89109; Holidays = 103698; Partnerships&Outreach = 89112; Prep = 89110; Tutoring = 89111;
+            // Shared Portfolio = 818;
+
+            // My Emails = 805;
 
             //-----------------------------------------------------------------------
             // Data Folder ID's - SBX
@@ -50,7 +55,9 @@ namespace ExportImport
             // Connector - September Prep = 102169; Connector - Tested = 102162; Enrolled Welcome = 102163; Handraiser = 102164; Inquiry Connector and NonConnector = 102165;
             // Online Registration Abandon = 102166; Candidate ID Generation = 102194; Email Consents = 102206; Explicit = 102204; Implicit = 102205; Emma Manual Unsubscribe = 102198;
             // Adding and Updating = 102207; Comparing = 102208; File Generation = 102209; Results = 102210; Flat Data = 102256; Backfeed = 102257; User Associations = 102258;
-            // Activity Report = 102259; Tracking Imports = 102260; My Templates = 99398; Logs = 102319; Portfolio = 99405; Activity Report Portfolio = 102240;
+            // Activity Report = 102259; Tracking Imports = 102260; My Templates = 99398; Logs = 102319;
+            
+            // Portfolio = 99405; Activity Report Portfolio = 102240;
             // Build Your Own Portfolio = 102241; EDGE = 102242; Header Images = 102243; Prep = 102244; Promotional Graphics = 102245; Demo = 102246;
             // Letter Assets = 102247; Letter Template = 102248; Moved from Shared = 102249; Newsletter Assets = 102250; Subscription Center = 102251; Supporting = 102252; Connector = 103723
             // Campaign Archive (Parent = Connector) = 103724; Internal = 103725; Staging = 103726; Campaign Archive (Parent = Staging) = 103727; Segments = 103747; Triggered Emails = 103748;
@@ -73,11 +80,14 @@ namespace ExportImport
             // Shared Items = 99408; Shared Contents = 99412; Archive = 103981; Body-Blank Layouts = 103982;
             // Body-Text = 103984; Announcements = 103986; EDGE = 103987; Partnerships&Outreach = 103988; Prep = 103989; Tutoring = 103990;
             // Header Images = 103985; Announcements = 103991; EDGE = 103992; Holidays = 103993; Partnerships&Outreach = 103995; Prep = 103996; Tutoring = 103997;
+            // Shared Portfolio = 99409;
 
-            int prodCatNum = 8885;
-            int sbxCatNum = 103748;
-            int prodPortCatNum = 9205;
-            int sbxPortCatNum = 102252;
+            // My Emails = 99396;
+
+            int prodCatNum = 103127;
+            int sbxCatNum = 104032;
+            int prodPortCatNum = 818;
+            int sbxPortCatNum = 99409;
 
             APIObject[] dataFolders = { };
             List<APIObject> dataFoldersByParent = new List<APIObject>();
@@ -92,6 +102,7 @@ namespace ExportImport
             APIObject[] portItems = { };
             APIObject[] importDefs = { };
             APIObject[] queries = { };
+            APIObject[] emails = { };
             string[] folderNames = { "Build Your Own", "Archive", "Body - Text Layouts", "Announcements", "EDGE", "Partnership&Outreach", "Prep", "Tutoring", 
                                        "Header Images", "Needs Headers", "Demo", "Journey", "Offers", "Letter", "Logos", "Newsletter", "Seasonal", "2016-09", 
                                        "Template", "Trigger Based", "Appointment Confirmations and Reminders" };
@@ -109,7 +120,7 @@ namespace ExportImport
 
                 //----------------------------------------------------------------------------------
                 // Data Folders
-                //DataFolderUtil.GetDataFolderByName(soapProd, "Holidays");
+                //DataFolderUtil.GetDataFolderByName(soapProd, "My Emails");
 
                 // Get All Folders By Name in Predefined Array
                 //foreach (string currFolderName in folderNames)
@@ -146,17 +157,17 @@ namespace ExportImport
 
                 //---------------------------------------------------------------------------------
                 // Data Extensions
-                //DataFolderUtil.GetDataFolderByName(soapProd, "Sylvan Source");
-                //dataExts = DataExtensionUtil.GetAllDataExtensionsByCategoryID(soapProd, prodCatNum);
-                //Console.WriteLine("Num DE's: " + dataExts.Length);
+                //DataFolderUtil.GetDataFolderByName(soapProd, "Shared Portfolio");
+                dataExts = DataExtensionUtil.GetAllDataExtensionsByCategoryID(soapProd, prodCatNum);
+                Console.WriteLine("Num DE's: " + dataExts.Length);
 
-                //foreach (DataExtension de in dataExts)
-                //{
-                //    de.Fields = (DataExtensionField[])DataExtensionFieldsUtil.GetDataExtensionFieldsByDECustomerKey(soapProd, de);
-                //}
+                foreach (DataExtension de in dataExts)
+                {
+                    de.Fields = (DataExtensionField[])DataExtensionFieldsUtil.GetDataExtensionFieldsByDECustomerKey(soapProd, de);
+                }
 
-                //Console.WriteLine("...");
-                //Console.ReadLine();
+                Console.WriteLine("...");
+                Console.ReadLine();
 
                 //---------------------------------------------------------------------------------
                 // Profile Attributes
@@ -198,7 +209,11 @@ namespace ExportImport
 
                 //---------------------------------------------------------------------------------
                 // Content Areas
-                contentAreas = ContentAreaUtil.GetAllContentAreas(soapProd);
+                //contentAreas = ContentAreaUtil.GetAllContentAreas(soapProd);
+                //contentAreas = ContentAreaUtil.GetAllContentAreasHavingCategoryNumber(soapProd);
+
+                // Emails
+                //emails = EmailUtil.GetAllEmailsByCategoryID(soapProd, 805);
             }
 
             using (SoapClient soapSbx = ExactTargetServices.ExactTargetBinding(ConfigSettings.ETUsernameSbx, ConfigSettings.ETPasswordSbx))
@@ -250,7 +265,7 @@ namespace ExportImport
 
                 //--------------------------------------------------------------------------------------------
                 // Data Folders -- Create folders by Parent Folder ID
-                //DataFolderUtil.GetDataFolderByName(soapSbx, "Holidays");
+                //DataFolderUtil.GetDataFolderByName(soapSbx, "My Emails");
                 //foreach (DataFolder df in dataFoldersByParentArray)
                 //{
                 //    Console.WriteLine("Creating Data Folder: " + df.Name);
@@ -267,12 +282,12 @@ namespace ExportImport
                 // Creating Data Extensions in Data Feeds folder based on DE's in Prod
                 //DataFolderUtil.GetDataFolderByName(soapSbx, "Sylvan Source");
 
-                //Console.WriteLine("Creating Data Extensions...");
-                //foreach (DataExtension de in dataExts)
-                //{
-                //    DataExtensionUtil.CreateDataExtensionFromExistingInProd(soapSbx, de, sbxCatNum);
-                //}
-                //Console.ReadLine();
+                Console.WriteLine("Creating Data Extensions...");
+                foreach (DataExtension de in dataExts)
+                {
+                    DataExtensionUtil.CreateDataExtensionFromExistingInProd(soapSbx, de, sbxCatNum);
+                }
+                Console.ReadLine();
 
                 //---------------------------------------------------------------------------------
                 // Create Role
@@ -321,10 +336,16 @@ namespace ExportImport
 
                 //---------------------------------------------------------------------------------
                 // Content Areas
-                foreach (ContentArea ca in contentAreas)
-                {
-                    ContentAreaUtil.CreateContentAreaFromExisting(soapSbx, ca);
-                }
+                //foreach (ContentArea ca in contentAreas)
+                //{
+                //    ContentAreaUtil.CreateContentAreaFromExisting(soapSbx, ca);
+                //}
+
+                // Emails
+                //foreach (Email currEmail in emails)
+                //{
+                //    EmailUtil.CreateEmailFromExisting(soapSbx, currEmail);
+                //}
             }
             
         }

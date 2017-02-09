@@ -9,6 +9,8 @@ namespace ExportImport
 {
     class ContentAreaUtil
     {
+        static int noCatOrNameCtr = 0;
+
         public static void DescribeContentArea(SoapClient soapClientIn)
         {
             string requestID;
@@ -51,6 +53,61 @@ namespace ExportImport
             rr.ClientIDs = targetClientIDs;
             rr.QueryAllAccounts = true;
             rr.QueryAllAccountsSpecified = true;
+
+            rr.ObjectType = "ContentArea";
+            rr.Properties = new String[] { "RowObjectID", "ObjectID", "ID", "CustomerKey", "Client.ID", "ModifiedDate", "CreatedDate",
+                "CategoryID", "Name", "Layout", "IsDynamicContent", "Content", "IsSurvey", "IsBlank", "Key" };
+
+            do
+            {
+                status = soapClientIn.Retrieve(rr, out requestID, out results);
+
+                totalCount += results.Length;
+
+                foreach (APIObject apiObject in results)
+                {
+                    totalResultsList.Add(apiObject);
+                }
+
+                Console.WriteLine(status);
+                Console.WriteLine("Num Content Areas: " + totalCount);
+
+                rr = new RetrieveRequest();
+                rr.ContinueRequest = requestID;
+            } while (status.Equals("MoreDataAvailable"));
+
+            totalResults = totalResultsList.ToArray<APIObject>();
+            Console.WriteLine("Total Content Areas: " + totalResults.Length);
+
+            Console.ReadLine();
+
+            return totalResults;
+        }
+
+        public static APIObject[] GetAllContentAreasHavingCategoryNumber(SoapClient soapClientIn)
+        {
+            String requestID;
+            String status;
+            APIObject[] results;
+            APIObject[] totalResults = { new APIObject() };
+            List<APIObject> totalResultsList = new List<APIObject>();
+            int totalCount = 0;
+
+            SimpleFilterPart sfp = new SimpleFilterPart();
+            sfp.Property = "CategoryID";
+            sfp.SimpleOperator = SimpleOperators.notEquals;
+            sfp.Value = new String[] { "0" };
+
+            RetrieveRequest rr = new RetrieveRequest();
+
+            ClientID clientID = new ClientID();
+            clientID.ID = 7237980;
+            clientID.IDSpecified = true;
+            ClientID[] targetClientIDs = { clientID };
+            rr.ClientIDs = targetClientIDs;
+            rr.QueryAllAccounts = true;
+            rr.QueryAllAccountsSpecified = true;
+            rr.Filter = sfp;
 
             rr.ObjectType = "ContentArea";
             rr.Properties = new String[] { "RowObjectID", "ObjectID", "ID", "CustomerKey", "Client.ID", "ModifiedDate", "CreatedDate",
@@ -233,11 +290,15 @@ namespace ExportImport
                     break;
                 case 0:
                     ca.CategoryID = 0;
-                    break;
+                    noCatOrNameCtr++;
+                    Console.WriteLine("Warning: Category 0");
+                    Console.WriteLine("Num content areas with no name or cat num: " + noCatOrNameCtr);
+                    return;
                 default:
                     //ca.CategoryID = 99401;
                     //break;
                     Console.WriteLine("Error creating Category ID for : " + ca.Name);
+                    Console.WriteLine("Category ID of incoming: " + caIn.CategoryID);
                     return;
             }
             ca.CategoryIDSpecified = caIn.CategoryIDSpecified;
