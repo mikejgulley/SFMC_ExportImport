@@ -313,5 +313,58 @@ namespace ExportImport
 
             Console.WriteLine(requestID + ": " + status);
         }
+
+        public static void CreateEmailFromExisting(SoapClient soapClientIn, Email emailIn, int catIdIn)
+        {
+            String requestID;
+            String status;
+
+            Email email = new Email();
+            // make switch statment
+            email.CategoryID = catIdIn;
+            //You can get the Category ID by hovering over the folder in the account and looking at the CID= in the URL at the bottom.                  
+            email.CategoryIDSpecified = true;
+            email.CharacterSet = emailIn.CharacterSet;
+            email.Client = new ClientID();
+            email.Client.ID = 7294703;
+            email.Client.IDSpecified = emailIn.Client.IDSpecified;
+            //email.ClonedFromID = emailIn.ClonedFromID;
+            //email.ClonedFromID = 1449; Template ID
+            email.ClonedFromID = 19410;
+            email.ClonedFromIDSpecified = emailIn.ClonedFromIDSpecified;
+            email.ContentAreas = new ContentArea[emailIn.ContentAreas.Length];
+            email.ContentAreas = emailIn.ContentAreas;
+            email.ContentCheckStatus = emailIn.ContentCheckStatus;
+            email.CorrelationID = emailIn.CorrelationID;
+            email.CustomerKey = emailIn.CustomerKey;
+            email.EmailType = emailIn.EmailType;
+            email.Folder = emailIn.Folder;
+            email.HasDynamicSubjectLine = emailIn.HasDynamicSubjectLine;
+            email.HasDynamicSubjectLineSpecified = emailIn.HasDynamicSubjectLineSpecified;
+            email.HTMLBody = emailIn.HTMLBody;
+            email.IsActive = emailIn.IsActive;
+            email.IsActiveSpecified = emailIn.IsActiveSpecified;
+            email.IsHTMLPaste = emailIn.IsHTMLPaste;
+            email.IsHTMLPasteSpecified = emailIn.IsHTMLPasteSpecified;
+            email.Name = emailIn.Name;
+            email.ObjectState = emailIn.ObjectState;
+            email.Owner = emailIn.Owner;
+            email.PreHeader = emailIn.PreHeader;
+            email.Status = emailIn.Status;
+            email.Subject = emailIn.Subject;
+            email.SyncTextWithHTML = emailIn.SyncTextWithHTML;
+            email.SyncTextWithHTMLSpecified = emailIn.SyncTextWithHTMLSpecified;
+            email.TextBody = emailIn.TextBody;
+
+
+            CreateResult[] cresults = soapClientIn.Create(new CreateOptions(), new APIObject[] { email }, out requestID, out status);
+
+            foreach (CreateResult result in cresults)
+            {
+                Console.WriteLine(result.StatusMessage);
+            }
+
+            Console.WriteLine(requestID + ": " + status);
+        }
     }
 }

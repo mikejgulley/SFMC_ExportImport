@@ -45,7 +45,7 @@ namespace ExportImport
             // Header Images = 89101; Announcements = 89108; EDGE = 89109; Holidays = 103698; Partnerships&Outreach = 89112; Prep = 89110; Tutoring = 89111;
             // Shared Portfolio = 818;
 
-            // My Emails = 805;
+            // My Emails = 805; Trigger Emails = 8976;
 
             //-----------------------------------------------------------------------
             // Data Folder ID's - SBX
@@ -82,7 +82,7 @@ namespace ExportImport
             // Header Images = 103985; Announcements = 103991; EDGE = 103992; Holidays = 103993; Partnerships&Outreach = 103995; Prep = 103996; Tutoring = 103997;
             // Shared Portfolio = 99409;
 
-            // My Emails = 99396;
+            // My Emails = 99396; Trigger Emails = 104091;
 
             int prodCatNum = 103127;
             int sbxCatNum = 104032;
@@ -158,16 +158,16 @@ namespace ExportImport
                 //---------------------------------------------------------------------------------
                 // Data Extensions
                 //DataFolderUtil.GetDataFolderByName(soapProd, "Shared Portfolio");
-                dataExts = DataExtensionUtil.GetAllDataExtensionsByCategoryID(soapProd, prodCatNum);
-                Console.WriteLine("Num DE's: " + dataExts.Length);
+                //dataExts = DataExtensionUtil.GetAllDataExtensionsByCategoryID(soapProd, prodCatNum);
+                //Console.WriteLine("Num DE's: " + dataExts.Length);
 
-                foreach (DataExtension de in dataExts)
-                {
-                    de.Fields = (DataExtensionField[])DataExtensionFieldsUtil.GetDataExtensionFieldsByDECustomerKey(soapProd, de);
-                }
+                //foreach (DataExtension de in dataExts)
+                //{
+                //    de.Fields = (DataExtensionField[])DataExtensionFieldsUtil.GetDataExtensionFieldsByDECustomerKey(soapProd, de);
+                //}
 
-                Console.WriteLine("...");
-                Console.ReadLine();
+                //Console.WriteLine("...");
+                //Console.ReadLine();
 
                 //---------------------------------------------------------------------------------
                 // Profile Attributes
@@ -212,8 +212,9 @@ namespace ExportImport
                 //contentAreas = ContentAreaUtil.GetAllContentAreas(soapProd);
                 //contentAreas = ContentAreaUtil.GetAllContentAreasHavingCategoryNumber(soapProd);
 
+                //---------------------------------------------------------------------------------
                 // Emails
-                //emails = EmailUtil.GetAllEmailsByCategoryID(soapProd, 805);
+                emails = EmailUtil.GetAllEmailsByCategoryID(soapProd, 8976);
             }
 
             using (SoapClient soapSbx = ExactTargetServices.ExactTargetBinding(ConfigSettings.ETUsernameSbx, ConfigSettings.ETPasswordSbx))
@@ -282,12 +283,12 @@ namespace ExportImport
                 // Creating Data Extensions in Data Feeds folder based on DE's in Prod
                 //DataFolderUtil.GetDataFolderByName(soapSbx, "Sylvan Source");
 
-                Console.WriteLine("Creating Data Extensions...");
-                foreach (DataExtension de in dataExts)
-                {
-                    DataExtensionUtil.CreateDataExtensionFromExistingInProd(soapSbx, de, sbxCatNum);
-                }
-                Console.ReadLine();
+                //Console.WriteLine("Creating Data Extensions...");
+                //foreach (DataExtension de in dataExts)
+                //{
+                //    DataExtensionUtil.CreateDataExtensionFromExistingInProd(soapSbx, de, sbxCatNum);
+                //}
+                //Console.ReadLine();
 
                 //---------------------------------------------------------------------------------
                 // Create Role
@@ -341,11 +342,13 @@ namespace ExportImport
                 //    ContentAreaUtil.CreateContentAreaFromExisting(soapSbx, ca);
                 //}
 
+                //---------------------------------------------------------------------------------
                 // Emails
-                //foreach (Email currEmail in emails)
-                //{
-                //    EmailUtil.CreateEmailFromExisting(soapSbx, currEmail);
-                //}
+                foreach (Email currEmail in emails)
+                {
+                    //EmailUtil.CreateEmailFromExisting(soapSbx, currEmail);
+                    EmailUtil.CreateEmailFromExisting(soapSbx, currEmail, 104091);
+                }
             }
             
         }
