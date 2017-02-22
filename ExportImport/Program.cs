@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ExportImport.PartnerAPI;
+using System.Diagnostics;
 
 namespace ExportImport
 {
@@ -185,11 +186,23 @@ namespace ExportImport
                 //---------------------------------------------------------------------------------
                 // Templates
                 //templates = TemplateUtil.GetAllTemplates(soapProd);
-                //templates = TemplateUtil.GetTemplateByCategoryId(soapProd, 807);
+                //templates = TemplateUtil.GetTemplateByCategoryId(soapProd, 10880);
 
                 //foreach (Template template in templates)
                 //{
                 //    Console.WriteLine("Template: " + template.TemplateName);
+                //    //JSONUtil.saveTemplateToJSON(template);
+                //}
+
+                //Console.ReadLine();
+
+                //---------------------------------------------------------------------------------
+                // Templates - PROD Retrieve ID's
+                //templates = TemplateUtil.GetTemplateByCategoryId(soapProd, 807, "prod");
+
+                //foreach (Template template in templates)
+                //{
+                //    Debug.WriteLine(String.Concat("Template: ", template.TemplateName, " - ID: ", template.ID));
                 //    //JSONUtil.saveTemplateToJSON(template);
                 //}
 
@@ -301,8 +314,20 @@ namespace ExportImport
                 // Templates
                 //foreach (Template temp in templates)
                 //{
-                //    TemplateUtil.CreateTemplateFromExisting(soapSbx, temp, 99398);
+                //    TemplateUtil.CreateTemplateFromExisting(soapSbx, temp, 105018);
                 //}
+
+                //---------------------------------------------------------------------------------
+                // Templates - SBX Retrieve ID's
+                //templates = TemplateUtil.GetTemplateByCategoryId(soapSbx, 99398, "sbx");
+
+                //foreach (Template template in templates)
+                //{
+                //    Debug.WriteLine(String.Concat("Template: ", template.TemplateName, " - ID: ", template.ID));
+                //    //JSONUtil.saveTemplateToJSON(template);
+                //}
+
+                //Console.ReadLine();
 
                 //---------------------------------------------------------------------------------
                 // Portfolio

@@ -329,11 +329,70 @@ namespace ExportImport
             email.Client.ID = 7294703;
             email.Client.IDSpecified = emailIn.Client.IDSpecified;
             //email.ClonedFromID = emailIn.ClonedFromID;
-            //email.ClonedFromID = 1449; Template ID
-            email.ClonedFromID = 19410;
-            email.ClonedFromIDSpecified = emailIn.ClonedFromIDSpecified;
-            email.ContentAreas = new ContentArea[emailIn.ContentAreas.Length];
-            email.ContentAreas = emailIn.ContentAreas;
+            //email.ClonedFromID = 1449; Email ID this was copied from NOT the Template ID... drat
+            //switch (emailIn.ClonedFromID)
+            //{   
+            //    case 1296:
+            //        email.ClonedFromID = 1445;
+            //        break;
+            //    case 1295:
+            //        email.ClonedFromID = 1446;
+            //        break;
+            //    case 1268:
+            //        email.ClonedFromID = 1447;
+            //        break;
+            //    case 1266:
+            //        email.ClonedFromID = 1448;
+            //        break;
+            //    case 1416:
+            //        email.ClonedFromID = 1449;
+            //        break;
+            //    case 1265:
+            //        email.ClonedFromID = 1450;
+            //        break;
+            //    case 1244:
+            //        email.ClonedFromID = 1451;
+            //        break;
+            //    case 1231:
+            //        email.ClonedFromID = 1452;
+            //        break;
+            //    case 648:
+            //        email.ClonedFromID = 1453;
+            //        break;
+            //    case 1245:
+            //        email.ClonedFromID = 1454;
+            //        break;
+            //    case 1422:
+            //        email.ClonedFromID = 1455;
+            //        break;
+            //    case 647:
+            //        email.ClonedFromID = 1456;
+            //        break;
+            //    case 1307:
+            //        email.ClonedFromID = 1457;
+            //        break;
+            //    case 1375:
+            //        email.ClonedFromID = 1458;
+            //        break;
+            //    case 1294:
+            //        email.ClonedFromID = 1459;
+            //        break;
+            //    case 1198:
+            //        email.ClonedFromID = 1460;
+            //        break;
+            //    case 1243:
+            //        email.ClonedFromID = 1461;
+            //        break;
+            //    //default:
+            //        //break;
+            //}
+            //email.ClonedFromIDSpecified = emailIn.ClonedFromIDSpecified;
+
+            if (emailIn.ContentAreas != null)
+            {
+                email.ContentAreas = new ContentArea[emailIn.ContentAreas.Length];
+                email.ContentAreas = emailIn.ContentAreas;
+            }
             email.ContentCheckStatus = emailIn.ContentCheckStatus;
             email.CorrelationID = emailIn.CorrelationID;
             email.CustomerKey = emailIn.CustomerKey;
@@ -355,7 +414,6 @@ namespace ExportImport
             email.SyncTextWithHTML = emailIn.SyncTextWithHTML;
             email.SyncTextWithHTMLSpecified = emailIn.SyncTextWithHTMLSpecified;
             email.TextBody = emailIn.TextBody;
-
 
             CreateResult[] cresults = soapClientIn.Create(new CreateOptions(), new APIObject[] { email }, out requestID, out status);
 

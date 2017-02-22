@@ -84,7 +84,7 @@ namespace ExportImport
             return totalResults;
         }
 
-        public static APIObject[] GetTemplateByCategoryId(SoapClient soapClientIn, int catIdIn)
+        public static APIObject[] GetTemplateByCategoryId(SoapClient soapClientIn, int catIdIn, string envIn)
         {
             String requestID;
             String status;
@@ -101,7 +101,14 @@ namespace ExportImport
             RetrieveRequest rr = new RetrieveRequest();
 
             ClientID clientID = new ClientID();
-            clientID.ID = 7237980;
+            if (envIn.ToLower() == "sbx")
+            {
+                clientID.ID = 7294703;
+            }
+            else
+            {
+                clientID.ID = 7237980;
+            }
             clientID.IDSpecified = true;
             ClientID[] targetClientIDs = { clientID };
             rr.ClientIDs = targetClientIDs;
